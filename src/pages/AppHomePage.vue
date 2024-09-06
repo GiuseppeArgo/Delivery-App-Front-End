@@ -23,8 +23,10 @@ export default {
       slug: '',
       cart: '',
       isLoading: false, // Flag to manage loading state
+      flag: ['american.png', 'italiana.png', 'japanese.png', 'chinese.png', 'greek.png', 'vegan.png', 'indian.png', 'français.png']
     };
   },
+
   created() {
     this.cart = JSON.parse(localStorage.getItem('cart'));
     this.slug = localStorage.getItem('slug');
@@ -44,9 +46,9 @@ export default {
         .then((response) => {
           this.isLoading = true;
           this.restaurantsList = response.data.result; // Update restaurantsList with API response
-          if(this.restaurantsList == null) {
-                       this.$router.push({ name: 'paginanontrovata' }); // redirect not found page 
-                    }
+          if (this.restaurantsList == null) {
+            this.$router.push({ name: 'paginanontrovata' }); // redirect not found page 
+          }
         })
         .catch((error) => {
           console.error(
@@ -70,37 +72,27 @@ export default {
         });
     },
 
-    // SelectType(id, isChecked) {
-    //   if (isChecked) {
-    //     // Add the type ID to the array if the checkbox is selected
-    //     this.selectedTypes.push(id);
-    //   } else {
-    //     // Remove the type ID from the array if the checkbox is deselected
-    //     const index = this.selectedTypes.indexOf(id);
-    //     if (index > -1) {
-    //       this.selectedTypes.splice(index, 1);
-    //     }
-    //   }
-    //   this.CallRestaurant(); // Remove the type ID from the array if the checkbox is deselected
-    // },
     SelectType(id, isChecked) {
-    const inputElement = document.getElementById('type-' + id);
-    if (isChecked) {
-      // Add the type ID to the array if the checkbox is selected
-      this.selectedTypes.push(id);
-      inputElement.classList.add('selected-checkbox');
-    } else {
-      // Remove the type ID from the array if the checkbox is deselected
-      const index = this.selectedTypes.indexOf(id);
-      if (index > -1) {
-        this.selectedTypes.splice(index, 1);
+      const inputElement = document.getElementById('type-' + id);
+      if (isChecked) {
+        // Add the type ID to the array if the checkbox is selected
+        this.selectedTypes.push(id);
+        inputElement.classList.add('selected-checkbox');
+      } else {
+        // Remove the type ID from the array if the checkbox is deselected
+        const index = this.selectedTypes.indexOf(id);
+        if (index > -1) {
+          this.selectedTypes.splice(index, 1);
+        }
+        inputElement.classList.remove('selected-checkbox');
       }
-      inputElement.classList.remove('selected-checkbox');
-    }
-    this.CallRestaurant(); // Remove the type ID from the array if the checkbox is deselected
-  },
+      this.CallRestaurant(); // Remove the type ID from the array if the checkbox is deselected
+    },
     getCartItemsLength() {
-            return this.cart && this.cart.items ? Object.keys(this.cart.items).length : 0;
+      return this.cart && this.cart.items ? Object.keys(this.cart.items).length : 0;
+    },
+    dynamicImage: function (curImg) {
+            return new URL(`../assets/img/bandiera/${curImg}`, import.meta.url).href;
         }
 
   },
@@ -116,27 +108,34 @@ export default {
 
 
   <div class="ms-homepage" v-if="isLoading">
-    
-        <!-- cart-container -->
-        <div v-if="getCartItemsLength() > 0">
-           <AppLinkCart :quantity="cart.totalQuantity" />
-         </div>
-        <!-- /cart-container -->
 
+    <!-- cart-container -->
+    <div v-if="getCartItemsLength() > 0">
+      <AppLinkCart :quantity="cart.totalQuantity" />
+    </div>
+    <!-- /cart-container -->
+
+    
     <!-- checkbox types -->
-    <div class="container w-50 pt-5 pb-5">
-      <div class="row justify-content-center align-items-center">
-        <div v-for="curType in typesList" :key="curType.id"
-          class="col-sm-6 col-md-6 col-lg-4 btn-group btn-group-toggle bnt-test d-flex justify-content-center align-items-center  provadelleprove">
-          <input type="checkbox" class="btn-check" :id="'type-' + curType.id" name="types" :value="curType.id" @change="(event) => {
-            SelectType(event.target.value, event.target.checked);
-          }
-            " />
-          <label class="checkbox-btn rounded"
-          :for="'type-' + curType.id">{{ curType.name }}</label>
+    <div class="container w-100 mb-5">
+      
+      <div class="container">
+        <span class="d-block text-center pt-5 pb-2 fs-4 fw-bold">
+          Seleziona la tua cucina preferita
+        </span>
+        <div class="row justify-content-center gap-1" role="group" aria-label="Basic checkbox toggle button group">
+          <div class="col-4 col-sm-3 col-md-1 col-lg-1" v-for="(curType, index) in typesList"
+            :key="curType.id">
+            <input type="checkbox" class="btn-check p-0 m-0" :id="'type-' + curType.id" name="types" :value="curType.id"
+              @change="(event) => { SelectType(event.target.value, event.target.checked); }">
+  
+            <label class="btn btn-outline-primary p-0 m-0" :for="'type-' + curType.id">
+              <img :src="dynamicImage(flag[index])" alt="Logo">
+            </label>
+          </div>
         </div>
       </div>
-    </div>
+      </div>
     <!-- /checkbox types -->
 
     <!-- card-container -->
@@ -197,21 +196,29 @@ export default {
   margin: 0;
   background-color: #F8F7F4;
 }
+.btn-outline-primary{
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+  }
 
-.checkbox-btn{
-  width: 150px;
-  min-width: 70px;
-  border: 1px solid $blue;
-  text-align: center;
-  color: $blue;
-  font-size: clamp(15px,2vw,20px);
-  padding: 5px 10px;
-}
+@media (max-width: 992px){
+  .btn-outline-primary{
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+  }
+  }
 
-.selected-checkbox + .checkbox-btn {
+.selected-checkbox+.checkbox-btn {
   background-color: $blue;
   color: white;
 }
+
+.btn-round{
+  border-radius: 50%;
+}
+
 
 
 /* Riduci la dimensione del testo rendendolo responsive per tutti i breakpoint */
