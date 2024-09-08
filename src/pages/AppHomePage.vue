@@ -92,8 +92,8 @@ export default {
       return this.cart && this.cart.items ? Object.keys(this.cart.items).length : 0;
     },
     dynamicImage: function (curImg) {
-            return new URL(`../assets/img/bandiera/${curImg}`, import.meta.url).href;
-        }
+      return new URL(`../assets/img/bandiera/${curImg}`, import.meta.url).href;
+    }
 
   },
 };
@@ -115,35 +115,33 @@ export default {
     </div>
     <!-- /cart-container -->
 
-    
+
     <!-- checkbox types -->
-    <div class="container w-100 mb-5">
-      
-      <div class="container">
-        <span class="d-block text-center pt-5 pb-2 fs-4 fw-bold">
-          Seleziona la tua cucina preferita
+      <div class="container container-types mb-5 pt-5">
+        <span class="d-block text-center text-danger pb-3 fs-4 fw-bold">
+          Seleziona la tipologia di cucina:
         </span>
-        <div class="row justify-content-center gap-1" role="group" aria-label="Basic checkbox toggle button group">
-          <div class="col-4 col-sm-3 col-md-1 col-lg-1" v-for="(curType, index) in typesList"
-            :key="curType.id">
-            <input type="checkbox" class="btn-check p-0 m-0" :id="'type-' + curType.id" name="types" :value="curType.id"
+        <div class="btn-container d-flex justify-content-center gap-1 flex-wrap" role="group"
+          aria-label="Basic checkbox toggle button group">
+          <div class=" d-flex justify-content-center align-items-center" v-for="(curType, index) in typesList" :key="curType.id">
+            <input type="checkbox" class="btn-check" :id="'type-' + curType.id" name="types" :value="curType.id"
               @change="(event) => { SelectType(event.target.value, event.target.checked); }">
-  
-            <label class="btn btn-outline-primary p-0 m-0" :for="'type-' + curType.id">
+
+            <label class="btn btn-outline-danger btn-type border-0 rounded-5 p-1 d-flex"
+              :for="'type-' + curType.id">
               <img :src="dynamicImage(flag[index])" alt="Logo">
             </label>
           </div>
         </div>
       </div>
-      </div>
     <!-- /checkbox types -->
 
     <!-- card-container -->
     <div class="container pb-5">
-      <div class="row gap-4 justify-content-center" v-if="restaurantsList.length > 0">
+      <div class="row gap-3 justify-content-center p-0 m-0" v-if="restaurantsList.length > 0">
         <!-- card -->
         <div v-for="curRestaurant in restaurantsList" :key="curRestaurant.id"
-          class="card col-lg-3 col-md-4 col-sm-5 col-7 p-0">
+          class="card col-7 col-sm-5 col-md-4 col-lg-3 p-0 m-0">
           <AppCard :cardObj="curRestaurant" />
         </div>
         <!-- /card -->
@@ -168,6 +166,12 @@ export default {
 
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
+
+.container-types{
+  font-family: "Sevillana", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
 
 .main-content {
   padding: 20px 0;
@@ -196,26 +200,54 @@ export default {
   margin: 0;
   background-color: #F8F7F4;
 }
-.btn-outline-primary{
-    width: 60px;
-    height: 60px;
-    padding: 5px;
-  }
 
-@media (max-width: 992px){
-  .btn-outline-primary{
-    width: 60px;
-    height: 60px;
-    padding: 5px;
+.btn-type {
+  width: 60px;
+  height: 60px;
+}
+
+
+@media (max-width: 992px) {
+  .btn-type {
+    width: 50px;
+    height: 50px;
   }
+}
+
+@media (max-width: 768px) {
+  .btn-container {
+    padding-left: 10px;
+    padding-right: 10px;
   }
+}
+
+@media (max-width: 580px) {
+  .btn-container {
+    padding-left: 120px;
+    padding-right: 120px;
+  }
+}
+
+@media (max-width: 468px) {
+  .btn-container {
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+}
+
+@media (max-width: 350px) {
+  .btn-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
 
 .selected-checkbox+.checkbox-btn {
   background-color: $blue;
   color: white;
 }
 
-.btn-round{
+.btn-round {
   border-radius: 50%;
 }
 
@@ -223,45 +255,45 @@ export default {
 
 /* Riduci la dimensione del testo rendendolo responsive per tutti i breakpoint */
 
-.btn {
-  font-size: 1rem;
-}
+// .btn {
+//   font-size: 1rem;
+// }
 
-@media (max-width: 1200px) {
-  .btn {
-    font-size: 1.2rem;
-  }
-}
+// @media (max-width: 1200px) {
+//   .btn {
+//     font-size: 1.2rem;
+//   }
+// }
 
-@media (max-width: 992px) {
-  .btn {
-    font-size: 1rem;
-  }
-}
+// @media (max-width: 992px) {
+//   .btn {
+//     font-size: 1rem;
+//   }
+// }
 
-@media (max-width: 768px) {
-  .btn {
-    font-size: 0.9rem;
-  }
-}
+// @media (max-width: 768px) {
+//   .btn {
+//     font-size: 0.9rem;
+//   }
+// }
 
-@media (max-width: 576px) {
-  .btn {
-    font-size: 0.8rem;
-  }
-}
+// @media (max-width: 576px) {
+//   .btn {
+//     font-size: 0.8rem;
+//   }
+// }
 
-@media (max-width: 400px) {
-  .btn {
-    font-size: 0.7rem;
-  }
-}
+// @media (max-width: 400px) {
+//   .btn {
+//     font-size: 0.7rem;
+//   }
+// }
 
-@media (max-width: 360px) {
-  .btn {
-    font-size: 0.6rem;
-  }
-}
+// @media (max-width: 360px) {
+//   .btn {
+//     font-size: 0.6rem;
+//   }
+// }
 
 /* Riduci la dimensione del testo rendendolo responsive per tutti i breakpoint */
 </style>
