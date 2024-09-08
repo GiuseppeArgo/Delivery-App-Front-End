@@ -45,20 +45,21 @@ export default {
             try {
                 // First call to get the token
                 await axios.get(`${store.apiMainUrl}/api/generatetoken`).then((resp) => {
-                    
+
 
                     const token = resp.data.result;
-                    
+
                 })
 
                 // Second call to make the payment
                 await axios.post(`${store.apiMainUrl}/api/makepayment`,
-                    { ...this.paymentDetails,
+                    {
+                        ...this.paymentDetails,
                         amount: this.cart.totalPrice // Our cart price value
                     },
                     { headers: { 'Content-type': 'multipart/form-data' } }).
                     then(response => {
-                        
+
 
                         this.saveOrder();
                     })
@@ -66,7 +67,7 @@ export default {
                         this.isLoading = false;
                         this.isError = true;
                         console.error(error);
-                        
+
                     })
             } catch (error) {
                 this.isLoading = false;
@@ -101,7 +102,7 @@ export default {
                 }
             })
                 .then(response => {
-                    
+
                     this.order_id = response.data.result;
 
                     // Send cart details along with the order ID
@@ -110,7 +111,7 @@ export default {
                         dishes: this.cart  // Assuming 'items' is what you want to send
                     };
 
-                    
+
 
                     // Execute API call to send the dish details
                     axios.post(`${store.apiMainUrl}/api/dishorders`, params, {
@@ -133,7 +134,7 @@ export default {
                 })
                 .catch(error => {
                     this.isLoading = false;
-                    this.isError= true;
+                    this.isError = true;
                     console.error('Errore nella chiamata API orders:', error);
                 });
 
@@ -294,12 +295,16 @@ export default {
 <template>
     <div v-if="isSuccess === false" class="container ms_container">
         <div v-if="isError === true" class="alert alert-danger text-center">Ops, qualcosa è andato storto!</div>
-        <div class="d-flex justify-content-center align-items-center mb-5 gap-2">
-            <span @click="goBack()" class="btn bg-primary rounded-circle">
-                <i class="fa-solid fa-arrow-left text-white"></i>
+        <div class="d-flex justify-content-center align-items-center position-relative w-100 m-auto mb-5 gap-2">
+            <span @click="goBack()" class="btn btn-outline-primary rounded-5 d-block d-sm-none">
+                <i class="fa-solid fa-arrow-left"></i>
+            </span>
+            <span @click="goBack()" class="btn btn-outline-primary rounded-5 btn-title btn-pos-left d-none d-sm-block">
+                <i class="fa-solid fa-arrow-left"></i>
             </span>
             <h2 class="text-center p-0 m-0">Procedi al checkout</h2>
         </div>
+        <!-- checkoutform??? -->
         <form id="checkoutform">
             <!-- User Details -->
             <div class="form-group">
@@ -368,15 +373,15 @@ export default {
             </div>
             <p class="mb-3 label"><span class="asterisco">*</span> questi campi sono obbligatori.</p>
             <div class="d-flex align-items-center gap-2">
-                <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center gap-2"
+                <button type="submit" class="btn-paynow btn btn-primary d-flex justify-content-center align-items-center gap-2"
                     @click.prevent="validateForm()">
-                    <span>Procedi al pagamento</span>
-                    <span :class="isLoading === true ? 'spinner-border' : ''" class="spinner"></span>
+                    <span>Paga ora</span>
+                    <span v-if="isLoading === true" :class="isLoading === true ? 'spinner-border' : ''" class="spinner"></span>
                 </button>
                 <div class="ml-auto ms_cart d-flex flex-column flex-sm-row text-center">
-                <span class="fw-bold">Prezzo totale:</span>
-                <span class="d-none d-sm-inline-block">&ensp;</span>
-                <span>{{ cartPrice.totalPrice.toFixed(2) }} €</span>
+                    <span class="fw-bold">Prezzo totale:</span>
+                    <span class="d-none d-sm-inline-block">&ensp;</span>
+                    <span>{{ cartPrice.totalPrice.toFixed(2) }} €</span>
                 </div>
             </div>
         </form>
@@ -397,11 +402,12 @@ export default {
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
 
+
 .ms_container {
-    min-height: 80vh;
+    // min-height: 80vh;
     margin-top: 150px;
     margin-bottom: 50px;
-    width: 100%;
+    // width: 100%;
 }
 
 .page_success {
@@ -422,16 +428,17 @@ export default {
 
 .ms_cart {
     padding: 5px 5px;
-    border: 3px solid $red;
+    border: 1px solid $blue;
     border-radius: 10px;
-    font-size: clamp(10px,2vw,15px);
+    font-size: clamp(10px, 2vw, 15px);
 }
 
-label,.label{
-    font-size: clamp(12px,2vw,15px);
+label,
+.label {
+    font-size: clamp(12px, 2vw, 15px);
 }
 
-.spinner{
+.spinner {
     font-size: 10px;
     width: 15px;
     height: 15px;
@@ -445,7 +452,7 @@ label,.label{
 }
 
 .asterisco {
-    color: $red;
+    color: $blue;
 }
 
 .text-danger {

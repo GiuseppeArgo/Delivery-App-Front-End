@@ -107,7 +107,7 @@ export default {
   <AppTop />
 
 
-  <div class="ms-homepage" v-if="isLoading">
+  <div v-if="isLoading">
 
     <!-- cart-container -->
     <div v-if="getCartItemsLength() > 0">
@@ -117,7 +117,7 @@ export default {
 
 
     <!-- checkbox types -->
-      <div class="container container-types mb-5 pt-5">
+      <div class="container font-title mb-5 pt-5">
         <span class="d-block text-center text-danger pb-3 fs-4 fw-bold">
           Seleziona la tipologia di cucina:
         </span>
@@ -129,7 +129,7 @@ export default {
 
             <label class="btn btn-outline-danger btn-type border-0 rounded-5 p-1 d-flex"
               :for="'type-' + curType.id">
-              <img :src="dynamicImage(flag[index])" alt="Logo">
+              <img :src="dynamicImage(flag[index])" alt="flag">
             </label>
           </div>
         </div>
@@ -167,12 +167,6 @@ export default {
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
 
-.container-types{
-  font-family: "Sevillana", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
-
 .main-content {
   padding: 20px 0;
 }
@@ -196,6 +190,7 @@ export default {
 
 .ms-homepage {
   min-height: 60vh;
+  width: 100%;
   // margin-bottom: 50px;
   margin: 0;
   background-color: #F8F7F4;
@@ -237,8 +232,8 @@ export default {
 
 @media (max-width: 350px) {
   .btn-container {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }
 

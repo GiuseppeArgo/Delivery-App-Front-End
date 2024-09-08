@@ -1,35 +1,101 @@
-@import 'bootstrap/scss/bootstrap';
-@import '@fortawesome/fontawesome-free';
+@import "bootstrap/scss/bootstrap";
+@import "@fortawesome/fontawesome-free";
 
-
-
-img{
-    max-width: 100%;
+img {
+  max-width: 100%;
 }
 
-
-.hide{
-    display:none;
+.hide {
+  display: none;
 }
 
 .cutText {
-    display: block;
-    width: 95%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  display: block;
+  width: 95%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.form-container{
-    height: 50vh;
+.form-container {
+  height: 50vh;
 }
 
-.img-container{
+.img-container {
+  width: 100%;
+  img {
     width: 100%;
-    img{
-        width: 100%;
-        aspect-ratio: 1;
-        object-fit: cover;
-    }
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
 }
 
+.font-title {
+  font-family: "Sevillana", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.container-types {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 35px;
+}
+
+.container-types-list {
+  width: 35px;
+}
+
+// btn-count-shop
+.ms-btn {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+
+@media (max-width: 468px) {
+  .ms-btn {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+  }
+}
+
+.ms-btn a:hover {
+  color: $white !important;
+}
+
+.btn-count {
+  border: 1px solid gray;
+}
+
+.btn-left {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn-right {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.btn-title {
+  position: absolute;
+  top: 0%;
+}
+
+// .btn-pos-top-1 {
+//     position: absolute;
+//     top: 10px;
+// }
+
+.btn-pos-left {
+  left: 10px;
+}
+
+.btn-pos-right {
+  right: 10px;
+}
+// btn-count-shop

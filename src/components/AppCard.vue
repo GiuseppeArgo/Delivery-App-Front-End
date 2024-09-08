@@ -56,14 +56,14 @@ export default {
                 <!-- address -->
                 <span class="card-title p-0 m-0 cutText">{{ cardObj.address }}</span>
 
-                
             </div>
             <!-- /card text -->
             <!-- new types -->
-            <div v-if="typeNames" class="list-unstyled mb-2 text-types container-types">
-                <img :src="dynamicImage(typeNames)" alt="Logo">
-                <!-- <span class="badge bg-primary text-wrap">{{ typeNames }}</span> -->
-            </div>
+            <div v-if="cardObj.types && cardObj.types.length > 0" class="list-unstyled mb-2 text-types container-types">
+    <div  class="d-flex flex-row-reverse gap-2">
+        <img :src="dynamicImage(type.name)" :alt="type.name" v-for="type in cardObj.types" :key="type.id">
+    </div>
+</div>
             <!-- / new types -->
 
         </div>
@@ -103,12 +103,7 @@ export default {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
-.container-types {
-    position: absolute;
-    top: 3%;
-    right: 3%;
-    width: 35px;
-}
+
 
 
 

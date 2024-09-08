@@ -56,8 +56,8 @@ export default {
                 .then(response => {
                     this.restaurant = response.data.result;
                     console.log(this.restaurant);
-                    if(this.restaurant == null) {
-                       this.$router.push({ name: 'paginanontrovata' }); // redirect not found page 
+                    if (this.restaurant == null) {
+                        this.$router.push({ name: 'paginanontrovata' }); // redirect not found page 
                     }
                 })
                 .catch(error => {
@@ -68,7 +68,7 @@ export default {
         openModal(dish, value) {
             this.dishToUpdate = dish;
             this.valueToUpdate = value;
-            console.log(dish,value);
+            console.log(dish, value);
             this.modalMessage = "Stai cambiando ristorante. Vuoi svuotare il carrello?";
             $(this.$refs.confirmModal).modal('show');
         },
@@ -182,7 +182,7 @@ export default {
             localStorage.setItem('cart', JSON.stringify(this.cart));
         },
 
-       
+
 
         calculateTotalPrice() {
             // Calculate the total price of the cart
@@ -193,6 +193,11 @@ export default {
         },
         getCartItemsLength() {
             return this.cart && this.cart.items ? Object.keys(this.cart.items).length : 0;
+        },
+        dynamicImage: function (curImg) {
+            console.log(curImg);
+            const lowerCaseImg = curImg.toLowerCase();
+            return new URL(`../assets/img/bandiera/${lowerCaseImg}.png`, import.meta.url).href;
         }
     }
 }
@@ -209,28 +214,24 @@ export default {
 
         <!-- cart-container -->
         <div v-if="getCartItemsLength() > 0">
-           <AppLinkCart :quantity="cart.totalQuantity" />
-         </div>
+            <AppLinkCart :quantity="cart.totalQuantity" />
+        </div>
         <!-- /cart-container -->
 
-        <!-- container-title -->
-        <div class>
-            <!-- title -->
-            <h1 class="text-center">{{ restaurant.name }}</h1>
-            <!-- title -->
-        </div>
-        <!-- /container-title -->
-
-
+        <!-- title -->
+        <h1 class="text-center">{{ restaurant.name }}</h1>
+        <!-- title -->
 
         <!-- restaurant details -->
-        <div class="container mt-3 border-bottom py-2" v-if="restaurant">
+        <div class="container mt-3 py-2" v-if="restaurant">
 
             <!-- row -->
             <div class="row justify-content-center align-items-center justify-content-sm-center">
                 <!-- restaurant image -->
-                <div class="md_cont-img col-12 col-sm-12 col-md-6 col-lg-6 d-flex justify-content-sm-center justify-content-md-end">
+                <div
+                    class="md_cont-img col-12 col-sm-12 col-md-6 col-lg-6 d-flex justify-content-sm-center justify-content-md-end">
                     <img :src="`${baseSrc}/${restaurant.image}`" class="md_img" alt="Restaurant image">
+                    <!-- <img :src="dynamicImage()" alt="Logo"> -->
                 </div>
                 <!-- /restaurant image -->
 
@@ -238,7 +239,7 @@ export default {
                 <div class="col-7 col-sm-6 col-md-6 col-lg-6 py-3">
 
                     <!-- cont-restaurant-description -->
-                    <div class="px-2">
+                    <div class="d-flex flex-column">
                         <dt>
                             Descrizione
                         </dt>
@@ -252,15 +253,15 @@ export default {
                         <dd>
                             {{ restaurant.address }}
                         </dd>
-
-                        <dt>Cucina</dt>
-                        <dd>
-                            <ul>
-                                <li v-for="(type, index) in restaurant.types" :key="index">
-                                    {{ type.name }}
-                                </li>
-                            </ul>
+                        <dt>
+                            Cucina:
+                        </dt>
+                        <dd class="d-flex gap-1">
+                            <div v-for="(type, index) in restaurant.types" :key="index">
+                                <img :src="dynamicImage(type.name)" alt="Logo" class="container-types-list">
+                            </div>
                         </dd>
+
                     </div>
                     <!-- /cont-restaurant-description -->
 
@@ -276,7 +277,11 @@ export default {
         <div class="container-fluid mt-5 ">
 
             <!-- title menu -->
-            <h2 class="text-center py-3">Menù</h2>
+            <div class="border-bottom w-75 m-auto">
+                <h2 class="font-title fs-1 text-center text-danger">
+                    Menù
+                </h2>
+            </div>
             <!-- /title menu -->
 
             <!-- dish card -->
@@ -289,29 +294,28 @@ export default {
                     <div v-if="curDish.visibility" class="row border-bottom align-items-center w-75">
 
                         <!-- image -->
-                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 py-3 d-flex justify-content-center">
-                            <img :src="`${baseSrc}/${curDish.image}`" class="w-75 rounded-circle md_img-dish" alt="immagine piatto">
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 py-1">
+                            <img :src="`${baseSrc}/${curDish.image}`" class="w-75 rounded-circle md_img-dish"
+                                alt="immagine piatto">
                         </div>
                         <!-- /image -->
 
                         <!-- description -->
-                        <div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 py-4">
+                        <div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 py-1 text-center">
                             <!-- name -->
-                            <dt>
-                                Nome Piatto
-                            </dt>
-                            <dd>
-                                {{ curDish.name }}
-                            </dd>
+                            <div class="fs-3 text-center">
+                                <span>
+                                    {{ curDish.name }}
+                                </span>
+                            </div>
                             <!-- /name -->
 
                             <!-- description -->
-                            <dt>
-                                Descrizione
-                            </dt>
-                            <dd>
-                                {{ curDish.description }}
-                            </dd>
+                            <div class="mb-4">
+                                <span>
+                                    {{ curDish.description }}
+                                </span>
+                            </div>
                             <!-- /description -->
 
                             <!-- price and btn shop -->
@@ -324,18 +328,16 @@ export default {
                                 </div>
                                 <!-- /price -->
 
-                                <div class="d-flex justify-contente-center align-items-center text-center border">
+                                <div class="d-flex justify-content-center align-items-center text-center">
                                     <!-- btn less -->
                                     <div @click.prevent="refresh(curDish, -1)"
-                                        class="ms-btn p-2 btn btn-outline-danger rounded-0 d-flex justify-content-center align-items-center">
-                                        <a class="text-decoration-none text-danger fw-bold">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </a>
+                                        class="ms-btn btn-left p-2 btn btn-outline-secondary d-flex justify-content-center align-items-center">
+                                        <i class="fa-solid fa-minus"></i>
                                     </div>
                                     <!-- /btn less -->
 
                                     <!-- quantity in cart -->
-                                    <div class="ms-btn" v-if="cart?.items">
+                                    <div class="ms-btn btn-count" v-if="cart?.items">
                                         <span v-if="cart?.items[curDish.id]">{{ cart?.items[curDish.id].quantity
                                             }}</span>
                                         <span v-else>0</span>
@@ -344,10 +346,8 @@ export default {
 
                                     <!-- btn add -->
                                     <div @click.prevent="refresh(curDish, 1)"
-                                        class="ms-btn p-2 btn btn-outline-primary rounded-0 d-flex justify-content-center align-items-center ">
-                                        <a class="text-decoration-none fw-bold">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </a>
+                                        class="ms-btn btn-right p-2 btn btn-outline-secondary ro d-flex justify-content-center align-items-center">
+                                        <i class="fa-solid fa-plus"></i>
                                     </div>
                                     <!-- /btn add -->
                                 </div>
@@ -416,7 +416,8 @@ export default {
 
 @media (max-width: 560px) {
     .cart-container {
-        top: 300px; /* Sposta il div più in basso */
+        top: 300px;
+        /* Sposta il div più in basso */
     }
 }
 
@@ -439,42 +440,37 @@ export default {
 }
 
 //BUTTON
-.ms-btn {
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-}
 
-@media (max-width: 468px){
-    .ms-btn{
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        font-size: 12px;
-    }
 
-}
 
-.ms-btn a:hover{
-    color: $white !important;
-}
 
 //CUSTOM IMG RESTAURANT
 .md_img-dish {
     // width: 20.5vw; /* Existing width */
-    aspect-ratio: 1; /* Added height to maintain square aspect ratio */
-    object-fit: cover; /* Ensures the image covers the area without stretching */
-    display: block; /* Centers the image */
-    margin: auto; /* Centers the image horizontally */
+    aspect-ratio: 1;
+    /* Added height to maintain square aspect ratio */
+    object-fit: cover;
+    /* Ensures the image covers the area without stretching */
+    display: block;
+    /* Centers the image */
+    margin: auto;
+    /* Centers the image horizontally */
 }
 
-.md_img{
-    width: 60%; /* Existing width */
-    aspect-ratio: 1; /* Added height to maintain square aspect ratio */
-    object-fit: cover; /* Ensures the image covers the area without stretching */
-    display: block; /* Centers the image */
-    margin: auto; /* Centers the image horizontally */
+
+.md_img {
+    width: 60%;
+    /* Existing width */
+    aspect-ratio: 1;
+    /* Added height to maintain square aspect ratio */
+    object-fit: cover;
+    /* Ensures the image covers the area without stretching */
+    display: block;
+    /* Centers the image */
+    margin: auto;
+    /* Centers the image horizontally */
 }
+
 //CUSTOM IMG CONTAINER
 
 //CUSTOM FONT
@@ -492,7 +488,8 @@ export default {
 //     color: $white;
 // }
 
-dd,dt{
+dd,
+dt {
     font-size: clamp(12px, 2vw, 20px);
 }
 </style>
