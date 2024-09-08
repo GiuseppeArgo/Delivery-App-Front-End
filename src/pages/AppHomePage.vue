@@ -17,55 +17,71 @@ export default {
     return {
       restaurantsList: [], // List to store restaurant data
       typesList: [], // List to store types of restaurants
+      flag: ['american.png', 'italiana.png', 'japanese.png', 'chinese.png', 'greek.png', 'vegan.png', 'indian.png', 'français.png'],
       selectedTypes: [], // Array to store selected restaurant types
       baseSrc: "http://127.0.0.1:8000/storage", // Base URL for image sources
       store,
       slug: '',
       cart: '',
       isLoading: false, // Flag to manage loading state
-      flag: ['american.png', 'italiana.png', 'japanese.png', 'chinese.png', 'greek.png', 'vegan.png', 'indian.png', 'français.png']
+      currentPage: 1, // current page
+      hasMoreRecords: true, // flag more restaurant
     };
   },
 
   created() {
     this.cart = JSON.parse(localStorage.getItem('cart'));
     this.slug = localStorage.getItem('slug');
-    console.log(this.cart.items);
-    console.log(this.slug);
-    this.CallRestaurant();
-    this.CallTypes();
-
+    this.CallRestaurant(); // start loading restaurant
+    this.CallTypes(); // call to typeList
   },
+
   methods: {
     CallRestaurant() {
+      // trasform to JSON the selected types
       const selectedTypesJson = encodeURIComponent(
         JSON.stringify(this.selectedTypes)
-      ); // Codifica l'array in una stringa URL
+      );
       axios
-        .get(`${store.apiMainUrl}/api/restaurants?type=${selectedTypesJson}`)
+        .get(`${store.apiMainUrl}/api/restaurants?type=${selectedTypesJson}&page=${this.currentPage}`)
         .then((response) => {
           this.isLoading = true;
-          this.restaurantsList = response.data.result; // Update restaurantsList with API response
-          if (this.restaurantsList == null) {
-            this.$router.push({ name: 'paginanontrovata' }); // redirect not found page 
+
+          if (response.data && response.data.data && response.data.data.length > 0) {
+            // add to list the new restaurant loaded
+            this.restaurantsList = [...this.restaurantsList, ...response.data.data];
+            this.currentPage++; // incremnent currentPage
+            const totalCount = response.data.total;
+            const loadedCount = this.restaurantsList.length;
+
+            this.hasMoreRecords = loadedCount < totalCount;
+          } else {
+            // disable flag more records
+            this.hasMoreRecords = false;
           }
+
+          this.isLoading = false;
         })
         .catch((error) => {
-          console.error(
-            "Errore durante la chiamata API:",
-            error.message || JSON.stringify(error)
-          );
-          this.$router.push({ name: 'paginanontrovata' }); // redirect not found page
+          console.error("Errore durante la chiamata API:", error.message || JSON.stringify(error));
+          this.$router.push({ name: 'paginanontrovata' });
+          this.isLoading = false;
         });
+    },
+
+    loadMoreRestaurants() {
+      if (this.hasMoreRecords && !this.isLoading) {
+        this.CallRestaurant();
+      }
     },
 
     CallTypes() {
       axios
-        .get(`${store.apiMainUrl}/api/types`, {
-          params: {},
-        })
+        .get(`${store.apiMainUrl}/api/types`)
         .then((response) => {
           this.typesList = response.data.result;
+          console.log(this.typesList);
+          this.flag = response.data.flags;
         })
         .catch((error) => {
           console.error("Errore durante la chiamata API:", error);
@@ -73,68 +89,62 @@ export default {
     },
 
     SelectType(id, isChecked) {
-      const inputElement = document.getElementById('type-' + id);
       if (isChecked) {
-        // Add the type ID to the array if the checkbox is selected
         this.selectedTypes.push(id);
-        inputElement.classList.add('selected-checkbox');
       } else {
-        // Remove the type ID from the array if the checkbox is deselected
         const index = this.selectedTypes.indexOf(id);
         if (index > -1) {
           this.selectedTypes.splice(index, 1);
         }
-        inputElement.classList.remove('selected-checkbox');
       }
-      this.CallRestaurant(); // Remove the type ID from the array if the checkbox is deselected
+      // reset function on page when selected or note type
+      this.currentPage = 1;
+      this.restaurantsList = [];
+      this.hasMoreRecords = true;
+      this.CallRestaurant();
     },
+
     getCartItemsLength() {
       return this.cart && this.cart.items ? Object.keys(this.cart.items).length : 0;
     },
+
     dynamicImage: function (curImg) {
       return new URL(`../assets/img/bandiera/${curImg}`, import.meta.url).href;
     }
-
   },
 };
 </script>
 
 <template>
   <AppHeader />
-
   <AppHero />
-
   <AppTop />
 
-
-  <div v-if="isLoading">
-
+  <div>
     <!-- cart-container -->
     <div v-if="getCartItemsLength() > 0">
       <AppLinkCart :quantity="cart.totalQuantity" />
     </div>
     <!-- /cart-container -->
 
-
-    <!-- checkbox types -->
-      <div class="container font-title mb-5 pt-5">
-        <span class="d-block text-center text-danger pb-3 fs-4 fw-bold">
-          Seleziona la tipologia di cucina:
-        </span>
-        <div class="btn-container d-flex justify-content-center gap-1 flex-wrap" role="group"
-          aria-label="Basic checkbox toggle button group">
-          <div class=" d-flex justify-content-center align-items-center" v-for="(curType, index) in typesList" :key="curType.id">
-            <input type="checkbox" class="btn-check" :id="'type-' + curType.id" name="types" :value="curType.id"
-              @change="(event) => { SelectType(event.target.value, event.target.checked); }">
-
-            <label class="btn btn-outline-danger btn-type border-0 rounded-5 p-1 d-flex"
-              :for="'type-' + curType.id">
-              <img :src="dynamicImage(flag[index])" alt="flag">
-            </label>
-          </div>
+    <!-- Sezione per la selezione dei tipi di cucina -->
+    <div class="container font-title mb-5 pt-5">
+      <span class="d-block text-center text-danger pb-3 fs-4 fw-bold">
+        Seleziona la tipologia di cucina:
+      </span>
+      <div class="btn-container d-flex justify-content-center gap-1 flex-wrap">
+        <div v-for="(curType, index) in typesList" :key="curType.id"
+          class="d-flex justify-content-center align-items-center">
+          <input type="checkbox" class="btn-check" :id="'type-' + curType.id"
+            @change="(event) => SelectType(curType.id, event.target.checked)" />
+          <label class="btn btn-outline-danger btn-type border-0 rounded-5 p-1 d-flex" :for="'type-' + curType.id">
+            <!-- Usa un'immagine predefinita o personalizzata basata su `curType` -->
+            <img :src="dynamicImage(curType.name.toLowerCase() + '.png')" alt="type image">
+          </label>
         </div>
       </div>
-    <!-- /checkbox types -->
+    </div>
+    <!-- /Sezione per la selezione dei tipi di cucina -->
 
     <!-- card-container -->
     <div class="container pb-5">
@@ -147,20 +157,24 @@ export default {
         <!-- /card -->
       </div>
 
-      <!-- No match div for search -->
+      <!-- Nessun ristorante corrispondente -->
       <div class="row align-items-center border w-75 m-auto rounded-5 py-3 px-4 text-center" v-else>
         <p class="fw-bold fs-5 p-0 m-0">
           Nessun ristorante corrispondente alla tua ricerca
         </p>
       </div>
-      <!-- /No match div for search -->
+      <!-- /Nessun ristorante corrispondente -->
     </div>
-    <!-- /card container -->
+    <!-- /card-container -->
 
-    <!-- MORE RESULT NOT USED AT THE MOMENT -->
-    <!-- <div class="col-12 text-center"> -->
-    <!-- <button class="btn btn-outline-danger">Mostra altri</button> -->
-    <!-- </div> -->
+    <!-- Pulsante "Carica altri" -->
+    <div class="text-center mb-4">
+      <button v-if="hasMoreRecords" @click="loadMoreRestaurants" :disabled="isLoading" class="btn btn-danger">
+        Carica altri ristoranti
+      </button>
+      <p v-else>Non ci sono più ristoranti da caricare.</p>
+    </div>
+    <!-- /Pulsante "Carica altri" -->
   </div>
 </template>
 
