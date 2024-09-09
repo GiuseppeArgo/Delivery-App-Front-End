@@ -6,15 +6,45 @@ export default {
   components: {
     AppCart
   },
+  mounted() {
+    document.addEventListener('click', this.handleOutsideClick);
+    // Aggiungi il listener sui link per chiudere il menu quando viene cliccato un link
+    this.addLinkClickListener();
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  },
+  methods: {
+    handleOutsideClick(event) {
+      const navbar = this.$refs.navbar;
+      if (navbar && !navbar.contains(event.target)) {
+        const navbarCollapse = document.getElementById('navbarNav');
+        if (navbarCollapse.classList.contains('show')) {
+          navbarCollapse.classList.remove('show'); // Chiudi il menu
+        }
+      }
+    },
+    addLinkClickListener() {
+      const links = document.querySelectorAll('.navbar-nav .nav-item a');
+      links.forEach(link => {
+        link.addEventListener('click', this.closeMenu);
+      });
+    },
+    closeMenu() {
+      const navbarCollapse = document.getElementById('navbarNav');
+      if (navbarCollapse.classList.contains('show')) {
+        navbarCollapse.classList.remove('show'); // Chiudi il menu dopo il clic su un link
+      }
+    }
+  }
 };
 </script>
 
 <template>
-
   <!-- Navbar -->
 
   <!-- logo -->
-  <nav class="navbar navbar-expand-sm">
+  <nav class="navbar navbar-expand-sm" ref="navbar">
     <div class="logo-img">
       <router-link :to="{ name: 'home' }">
         <img src="../assets/img/logo_top.png" alt="Logo">

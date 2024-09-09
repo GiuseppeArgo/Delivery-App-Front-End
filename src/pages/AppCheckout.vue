@@ -2,8 +2,12 @@
 import axios from 'axios';
 import { store } from "../store";
 import { RouterLink } from 'vue-router';
+import AppTop from '../components/AppTop.vue';
 
 export default {
+    components:{
+        AppTop
+    },
     data() {
         return {
             firstName: '',
@@ -29,7 +33,10 @@ export default {
             isError: false,
         };
     },
+
     created() {
+    window.scrollTo(0,0);
+
         // Store the navigation history count
         this.$root.historyCount = window.history.length;
         this.cartPrice = JSON.parse(localStorage.getItem('cart'));
@@ -293,6 +300,7 @@ export default {
 </script>
 
 <template>
+    <AppTop :scrollThreshold="200" :scrollToPosition="150"/>
     <div v-if="isSuccess === false" class="container ms_container">
         <div v-if="isError === true" class="alert alert-danger text-center">Ops, qualcosa è andato storto!</div>
         <div class="d-flex justify-content-center align-items-center position-relative w-100 m-auto mb-5 gap-2">

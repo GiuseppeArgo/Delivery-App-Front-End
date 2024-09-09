@@ -123,7 +123,7 @@ export default {
   <div>
     <!-- cart-container -->
     <div v-if="getCartItemsLength() > 0">
-      <AppLinkCart :quantity="cart.totalQuantity" />
+      <AppLinkCart :quantity="cart.totalQuantity" :scrollThreshold="300" />
     </div>
     <!-- /cart-container -->
 
@@ -169,10 +169,12 @@ export default {
 
     <!-- Pulsante "Carica altri" -->
     <div class="text-center mb-4">
-      <button v-if="hasMoreRecords" @click="loadMoreRestaurants" :disabled="isLoading" class="btn btn-danger">
-        Carica altri ristoranti
+      <button v-if="hasMoreRecords" @click="loadMoreRestaurants" :disabled="isLoading" class="btn btn-outline-danger rounded-4">
+        <div class="d-flex flex-column">
+          <span>Mostra di più</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
       </button>
-      <p v-else>Non ci sono più ristoranti da caricare.</p>
     </div>
     <!-- /Pulsante "Carica altri" -->
   </div>
@@ -260,6 +262,18 @@ export default {
   border-radius: 50%;
 }
 
+.btn-outline-danger:focus {
+  box-shadow: none;
+}
+
+button:hover div{
+            transform: translateY(5px);
+            transition: transform 0.6s ease;
+        }
+
+button div{
+  transition: transform 0.6s ease;
+}
 
 
 /* Riduci la dimensione del testo rendendolo responsive per tutti i breakpoint */

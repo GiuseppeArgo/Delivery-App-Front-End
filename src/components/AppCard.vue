@@ -59,11 +59,11 @@ export default {
             </div>
             <!-- /card text -->
             <!-- new types -->
-            <div v-if="cardObj.types && cardObj.types.length > 0" class="list-unstyled mb-2 text-types container-types">
-    <div  class="d-flex flex-row-reverse gap-2">
-        <img :src="dynamicImage(type.name)" :alt="type.name" v-for="type in cardObj.types" :key="type.id">
-    </div>
-</div>
+            <div v-if="cardObj.types && cardObj.types.length > 0" class="list-unstyled mb-2 container-types">
+                <div class="d-flex flex-row-reverse gap-2 types">
+                    <img :src="dynamicImage(type.name)" :alt="type.name" v-for="type in cardObj.types" :key="type.id">
+                </div>
+            </div>
             <!-- / new types -->
 
         </div>
@@ -75,9 +75,11 @@ export default {
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
 
-// .img-container{
-//     position: relative;
-// }
+.types{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
 
 .main-content {
     padding: 20px 0;
@@ -145,15 +147,10 @@ span {
 
 
 @media (max-width: 768px) {
-    .text-types {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
 
-    .container-types{
-        top: 10%;
+    .container-types {
+        top: 10px;
+        right: 0;
     }
 
     .center {
@@ -165,6 +162,10 @@ span {
     .text-truncate {
         text-wrap: wrap;
         text-align: center;
+    }
+
+    .types{
+        width: 20px;
     }
 }
 

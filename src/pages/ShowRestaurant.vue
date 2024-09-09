@@ -28,7 +28,8 @@ export default {
         };
     },
     created() {
-        window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
+
         // Try to retrieve the cart from localStorage and convert it into a JavaScript object
         let cartString = localStorage.getItem('cart');
         if (cartString) {
@@ -206,7 +207,7 @@ export default {
 <template>
 
     <!-- top page -->
-    <AppTop />
+    <AppTop :scrollToPosition="450"/>
     <!-- /top page -->
 
     <!-- container-show-restaurant -->

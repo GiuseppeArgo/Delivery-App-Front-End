@@ -1,6 +1,11 @@
 <script>
+import AppTop from '../components/AppTop.vue';
 import { clearCart } from '../function.js';
+
 export default {
+  components:{
+    AppTop
+  },
   data() {
     return {
       slug: '',
@@ -13,7 +18,6 @@ export default {
     }
   },
   created() {
-    window.scrollTo(0, 0);
     this.$root.historyCount = window.history.length;
     this.slug = this.$route.params.slug;
     console.log(this.slug);
@@ -147,6 +151,7 @@ export default {
 </script>
 
 <template>
+  <AppTop :scrollThreshold="200"/>
   <div class="container md_cont">
     <div class="w-75 m-auto position-relative d-flex justify-content-center align-items-center gap-2 mb-5">
       <!-- btn go back -->
@@ -231,7 +236,7 @@ export default {
 
       <div class="text-center w-100">
         <router-link :to="{ name: 'checkout' }" class="ms_checkout">
-          <button class="btn btn-primary w-sm-100 w-md-25">
+          <button class="btn btn-primary border-0 w-sm-100 w-md-25">
             Procedi al checkout
           </button>
         </router-link>
@@ -265,9 +270,9 @@ export default {
           <span class="fs-4">Sei sicuro di voler svuotare il carrello?</span>
         </div>
         <div class="modal-footer d-flex justify-content-around">
-          <button type="button" class="btn btn-danger w-25 d-flex justify-content-center"
+          <button type="button" class="btn btn-outline-danger w-25 d-flex justify-content-center"
             data-dismiss="modal">Annulla</button>
-          <button type="button" class="btn btn-primary w-25" @click.prevent="modalClearBtn"
+          <button type="button" class="btn btn-outline-success w-25" @click.prevent="modalClearBtn"
             data-dismiss="modal">Svuota</button>
         </div>
       </div>
