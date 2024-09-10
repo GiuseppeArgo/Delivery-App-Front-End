@@ -36,7 +36,7 @@ export default {
             <div class="card-body gap-1 p-2 mt-2">
 
                 <!-- name -->
-                <span class="card-title p-0 m-0 cutText text-truncate font-card-title">
+                <span class="card-title p-0 m-0 cutText font-card-title">
                     {{ cardObj.name }}
                 </span>
                 <!-- /name -->
@@ -104,13 +104,6 @@ export default {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
-.cutText {
-    width: 90%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .font-card-title {
     font-size: clamp(13px, 2vw, 18px);
     font-weight: 700;
@@ -118,6 +111,16 @@ export default {
 
 span {
     font-size: clamp(10px, 2vw, 15px);
+}
+
+// img
+.img-container {
+  width: 100%;
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
 }
 
 // @media query

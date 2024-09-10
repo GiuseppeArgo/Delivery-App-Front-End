@@ -126,7 +126,7 @@ export default {
             console.log(this.cart);
         },
         addToCart(dish_id, dish_name, quantity, price) {
-            // assegno slug
+            // assign slug
             localStorage.setItem('slug', this.curSlug);
             this.slug = localStorage.getItem('slug');
             console.log(this.slug);
@@ -156,7 +156,7 @@ export default {
             }
             // /Update total price
 
-            // Add/remove quantity in the cart or remove item
+            // Add or remove quantity in the cart or remove item
             if (!this.cart.items[dish_id] && quantity === 1) {
                 this.cart.items[dish_id] = {
                     dish_id: dish_id,
@@ -176,7 +176,7 @@ export default {
                     }
                 }
             }
-            // / Add/remove quantity in the cart or remove item
+            // / Add or remove quantity in the cart or remove item
 
 
             // Save the updated cart to localStorage
@@ -227,12 +227,11 @@ export default {
         <div class="container mt-3 py-2" v-if="restaurant">
 
             <!-- row -->
-            <div class="row justify-content-center align-items-center justify-content-sm-center">
+            <div class="row flex-center">
                 <!-- restaurant image -->
                 <div
-                    class="md_cont-img col-12 col-sm-12 col-md-6 col-lg-6 d-flex justify-content-sm-center justify-content-md-end">
-                    <img :src="`${baseSrc}/${restaurant.image}`" class="md_img" alt="Restaurant image">
-                    <!-- <img :src="dynamicImage()" alt="Logo"> -->
+                    class="col-12 col-sm-12 col-md-6 col-lg-6 d-flex justify-content-sm-center justify-content-md-end">
+                    <img :src="`${baseSrc}/${restaurant.image}`" class="img-restaurant" alt="Restaurant image">
                 </div>
                 <!-- /restaurant image -->
 
@@ -279,7 +278,7 @@ export default {
 
             <!-- title menu -->
             <div class="border-bottom w-75 m-auto">
-                <h2 class="font-title fs-1 text-center text-danger">
+                <h2 class="font-title fs-1 text-danger">
                     Menù
                 </h2>
             </div>
@@ -289,14 +288,14 @@ export default {
             <div v-for="curDish in restaurant.dishes">
 
                 <!-- container-dish-card -->
-                <div v-if="restaurant.dishes.length > 0" class="container d-flex justify-content-center">
+                <div v-if="restaurant.dishes.length > 0" class="container flex-center">
 
                     <!-- row-dish-card -->
                     <div v-if="curDish.visibility" class="row border-bottom align-items-center w-75">
 
                         <!-- image -->
-                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 py-1">
-                            <img :src="`${baseSrc}/${curDish.image}`" class="w-75 rounded-circle md_img-dish"
+                        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 py-1">
+                            <img :src="`${baseSrc}/${curDish.image}`" class="w-75 img-dish"
                                 alt="immagine piatto">
                         </div>
                         <!-- /image -->
@@ -329,10 +328,10 @@ export default {
                                 </div>
                                 <!-- /price -->
 
-                                <div class="d-flex justify-content-center align-items-center text-center">
+                                <div class="flex-center">
                                     <!-- btn less -->
                                     <div @click.prevent="refresh(curDish, -1)"
-                                        class="ms-btn btn-left p-2 btn btn-outline-secondary d-flex justify-content-center align-items-center">
+                                        class="ms-btn btn-left p-2 btn btn-outline-secondary flex-center">
                                         <i class="fa-solid fa-minus"></i>
                                     </div>
                                     <!-- /btn less -->
@@ -347,7 +346,7 @@ export default {
 
                                     <!-- btn add -->
                                     <div @click.prevent="refresh(curDish, 1)"
-                                        class="ms-btn btn-right p-2 btn btn-outline-secondary ro d-flex justify-content-center align-items-center">
+                                        class="ms-btn btn-right p-2 btn btn-outline-secondary flex-center">
                                         <i class="fa-solid fa-plus"></i>
                                     </div>
                                     <!-- /btn add -->
@@ -398,7 +397,7 @@ export default {
 <style lang="scss" scoped>
 @use "../sass/colorpalette.scss" as *;
 
-//CART CONTAINER
+//container
 .cart-container {
     background-color: $blue;
     width: 50px;
@@ -415,82 +414,46 @@ export default {
     align-items: center;
 }
 
+.container-show-restaurant {
+    position: relative;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
+
+.container-types-list {
+  width: 35px;
+}
+
+//img
+.img-dish {
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    border-radius: 50%;
+}
+
+
+.img-restaurant {
+    width: 60%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+}
+
+
+// font size
+dd,
+dt {
+    font-size: clamp(12px, 2vw, 20px);
+}
+
+// media query
 @media (max-width: 560px) {
     .cart-container {
         top: 300px;
         /* Sposta il div più in basso */
     }
-}
-
-//******************* */
-//CONTAINER SHOW RESTAURANT
-.container-show-restaurant {
-    position: relative;
-    // min-height: 100vh;
-    margin-top: 100px;
-    margin-bottom: 50px;
-}
-
-// COUNTER
-.counter {
-    margin: 0;
-    padding: 0;
-    // width: 20px;
-    aspect-ratio: 1;
-
-}
-
-//BUTTON
-
-
-
-
-//CUSTOM IMG RESTAURANT
-.md_img-dish {
-    // width: 20.5vw; /* Existing width */
-    aspect-ratio: 1;
-    /* Added height to maintain square aspect ratio */
-    object-fit: cover;
-    /* Ensures the image covers the area without stretching */
-    display: block;
-    /* Centers the image */
-    margin: auto;
-    /* Centers the image horizontally */
-}
-
-
-.md_img {
-    width: 60%;
-    /* Existing width */
-    aspect-ratio: 1;
-    /* Added height to maintain square aspect ratio */
-    object-fit: cover;
-    /* Ensures the image covers the area without stretching */
-    display: block;
-    /* Centers the image */
-    margin: auto;
-    /* Centers the image horizontally */
-}
-
-//CUSTOM IMG CONTAINER
-
-//CUSTOM FONT
-// .md_circle {
-//     width: 25px;
-//     height: 25px;
-//     line-height: 25px;
-//     text-align: center;
-//     border-radius: 50%;
-//     position: absolute;
-//     bottom: 35px;
-//     right: 35px;
-//     font-size: 1rem;
-//     background-color: orange;
-//     color: $white;
-// }
-
-dd,
-dt {
-    font-size: clamp(12px, 2vw, 20px);
 }
 </style>

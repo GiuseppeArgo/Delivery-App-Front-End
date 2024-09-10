@@ -18,6 +18,7 @@ export default {
     }
   },
   created() {
+    window.scrollTo(0, 0);
     this.$root.historyCount = window.history.length;
     this.slug = this.$route.params.slug;
     console.log(this.slug);
@@ -57,7 +58,6 @@ export default {
 
 
       console.log(this.cart);
-      // this.$store.dispatch('updateRestaurantId', restaurant_id);
     },
     addToCart(dish_id, dish_name, quantity, price) {
       // Check if `cart` and `cart.items` are defined
@@ -88,7 +88,7 @@ export default {
       }
       // /Update total price
 
-      // Add/remove quantity in the cart or remove item
+      // Add or remove quantity in the cart or remove item
       if (!this.cart.items[dish_id] && quantity === 1) {
         this.cart.items[dish_id] = {
           dish_id: dish_id,
@@ -109,7 +109,7 @@ export default {
           }
         }
       }
-      // / Add/remove quantity in the cart or remove item
+      // / Add or remove quantity in the cart or remove item
 
 
       // Save the updated cart to localStorage
@@ -130,15 +130,15 @@ export default {
       const quantity = this.cart.items[dish_id].quantity;
       const price = this.cart.items[dish_id].price;
 
-      // Rimuovi completamente l'articolo dal carrello
+      // remove article in cart
       delete this.cart.items[dish_id];
       this.cart.totalQuantity -= quantity;
       this.cart.totalPrice -= price * quantity;
 
-      // Salva il carrello refreshto in localStorage
+      // save refresh cart in local storage
       localStorage.setItem('cart', JSON.stringify(this.cart));
 
-      // Rimuovi articoli specifici dal localStorage se il carrello è vuoto
+      // remove all element in this.cart if cart is empty
       if (Object.keys(this.cart.items).length === 0) {
         clearCart(this.cart);
       }
@@ -152,7 +152,7 @@ export default {
 
 <template>
   <AppTop :scrollThreshold="200"/>
-  <div class="container md_cont">
+  <div class="container">
     <div class="w-75 m-auto position-relative d-flex justify-content-center align-items-center gap-2 mb-5">
       <!-- btn go back -->
       <span @click="goBack()" class="btn btn-outline-primary rounded-5 btn-title btn-pos-left">
@@ -170,9 +170,9 @@ export default {
           <tr>
             <th scope="col">Piatto</th>
             <th scope="col">Quantita</th>
-            <th scope="col" class="hide-responsive">Rimuovi</th>
+            <th scope="col" class="d-none d-sm-table-cell">Rimuovi</th>
             <th scope="col">Prezzo</th>
-            <th scope="col" class="hide-responsive">Totale</th>
+            <th scope="col" class="d-none d-sm-table-cell">Totale</th>
           </tr>
         </thead>
 
@@ -193,24 +193,24 @@ export default {
                 </span>
                 <!-- btn add -->
                 <div @click.prevent="refresh(article, 1)"
-                  class="ms-btn btn-right p-2 btn btn-outline-secondary ro d-flex justify-content-center align-items-center">
+                  class="ms-btn btn-right p-2 btn btn-outline-secondary flex-center">
                   <i class="fa-solid fa-plus"></i>
                 </div>
                 <!-- /btn add -->
               </div>
             </td>
-            <td class="align-middle hide-responsive">
+            <td class="align-middle d-none d-sm-table-cell">
               <div @click.prevent="removeAllItems(article)" class="btn btn-outline-danger ms-btn-trash">
                 <i class="fa-solid fa-trash"></i>
               </div>
             </td>
 
             <td class="align-middle">{{ (article.price).toFixed(2) }}€</td>
-            <td class="align-middle hide-responsive">{{ (article.price * article.quantity).toFixed(2) }}€</td>
+            <td class="align-middle d-none d-sm-table-cell">{{ (article.price * article.quantity).toFixed(2) }}€</td>
           </tr>
           <tr>
             <td colspan="5">
-              <div class="d-flex justify-content-between align-items-center">
+              <div class="flex-center justify-content-between">
                 <div class="">
                   <span>
                     <strong>Prezzo Totale Carrello: </strong>
@@ -234,26 +234,24 @@ export default {
         </tbody>
       </table>
 
-      <div class="text-center w-100">
-        <router-link :to="{ name: 'checkout' }" class="ms_checkout">
+      <div class="text-center w-100 mb-5">
+        <router-link :to="{ name: 'checkout' }">
           <button class="btn btn-primary border-0 w-sm-100 w-md-25">
             Procedi al checkout
           </button>
         </router-link>
-        <!-- <button type="button" class="btn btn-danger mb-2 mb-sm-0 w-100 w-sm-25 mb-5 w-25 text-nowrap"
-          data-toggle="modal" data-target="#exampleModal">
-          Svuota carrello
-        </button> -->
       </div>
 
     </div>
 
     <!-- No match div for search -->
-    <div class="row align-items-center border w-75 m-auto rounded-5 py-3 px-4 text-center" v-else>
-      <p class="fw-bold fs-5 p-0 m-0">
-        Il tuo carrello è vuoto
-      </p>
-    </div>
+     <div v-else class="container-empty-cart">
+       <div class="row py-4 ">
+         <p class="m-0">
+           Il tuo carrello è vuoto
+         </p>
+       </div>
+     </div>
     <!-- /No match div for search -->
 
   </div>
@@ -284,19 +282,27 @@ export default {
 
 <!-- @click.prevent="clearCart()" -->
 
-<style scoped>
-.md_cont {
+<style scoped lang="scss">
+
+// container
+.container {
   margin-top: 150px;
-  /* margin-bottom: 50px; */
-  min-height: 100vh;
+  min-height: 60vh;
 }
 
-.ms_checkout {
-  width: 100%;
-  text-decoration: none;
-  color: white;
+.container-empty-cart{
+ margin-top: 100px;
+ width: 75%;
+ margin: auto;
+ border-radius: 30px;
+ border: 1px solid rgb(228, 228, 228);
+ text-align: center;
+ font-weight: 700;
+ font-size: 22px;
+
 }
 
+// btn
 .ms-btn {
   width: 30px;
   aspect-ratio: 1;
@@ -311,6 +317,8 @@ export default {
   padding-left: 0.3px;
 }
 
+
+// media query
 @media (max-width: 768px) {
   .w-sm-25 {
     width: 100% !important;
@@ -321,16 +329,11 @@ export default {
   }
 }
 
-.btn-secondary,
-.bg-color {
-  background-color: #b1b5b8;
-}
-
-@media (max-width: 430px) {
-  .hide-responsive {
-    display: none;
+@media (max-width: 468px){
+  .container{
+    min-height: 60vh;
+    margin-top: 110px;
   }
 }
-
 
 </style>

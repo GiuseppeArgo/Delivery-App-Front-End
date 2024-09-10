@@ -127,24 +127,23 @@ export default {
     </div>
     <!-- /cart-container -->
 
-    <!-- Sezione per la selezione dei tipi di cucina -->
-    <div class="container font-title mb-5 pt-5">
-      <span class="d-block text-center text-danger pb-3 fs-2 fw-bold">
-        Seleziona la tipologia di cucina:
+    <!-- Filter for typologies -->
+    <div class="container font-title py-5">
+      <span class="d-block">
+        Seleziona la tipologia di cucina
       </span>
-      <div class="btn-container d-flex justify-content-center gap-1 flex-wrap">
-        <div v-for="(curType, index) in typesList" :key="curType.id"
-          class="d-flex justify-content-center align-items-center">
+      <div class="btn-container d-flex justify-content-center flex-wrap">
+        <div v-for="(curType, index) in typesList" :key="curType.id">
           <input type="checkbox" class="btn-check" :id="'type-' + curType.id"
             @change="(event) => SelectType(curType.id, event.target.checked)" />
-          <label class="btn btn-outline-danger btn-type border-0 rounded-5 p-1 d-flex" :for="'type-' + curType.id">
-            <!-- Usa un'immagine predefinita o personalizzata basata su `curType` -->
+          <label class="btn btn-outline-danger btn-type border-0 rounded-5 p-1" :for="'type-' + curType.id">
             <img :src="dynamicImage(curType.name.toLowerCase() + '.png')" alt="type image">
           </label>
         </div>
       </div>
     </div>
-    <!-- /Sezione per la selezione dei tipi di cucina -->
+    <!-- Filter for typologies -->
+
 
     <!-- card-container -->
     <div class="container pb-5">
@@ -157,66 +156,57 @@ export default {
         <!-- /card -->
       </div>
 
-      <!-- Nessun ristorante corrispondente -->
-      <div class="row align-items-center border w-75 m-auto rounded-5 py-3 px-4 text-center" v-else>
-        <p class="fw-bold fs-5 p-0 m-0">
+      <!-- No result found -->
+      <div v-else class="row w-75 m-auto border rounded-5 py-3 px-4 text-center">
+        <p class="fw-bold fs-5 m-0">
           Nessun ristorante corrispondente alla tua ricerca
         </p>
       </div>
-      <!-- /Nessun ristorante corrispondente -->
+      <!-- No result found -->
+
     </div>
     <!-- /card-container -->
 
-    <!-- Pulsante "Carica altri" -->
+    <!-- btn load more restaurant" -->
     <div class="text-center mb-4">
-      <button v-if="hasMoreRecords" @click="loadMoreRestaurants" :disabled="isLoading" class="btn btn-outline-danger rounded-4">
+      <button v-if="hasMoreRecords" @click="loadMoreRestaurants" :disabled="isLoading"
+        class="btn btn-outline-danger rounded-4">
         <div class="d-flex flex-column">
           <span>Mostra di più</span>
           <i class="fa-solid fa-chevron-down"></i>
         </div>
       </button>
     </div>
-    <!-- /Pulsante "Carica altri" -->
+    <!-- btn load more restaurant" -->
+
   </div>
 </template>
 
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
 
-.main-content {
-  padding: 20px 0;
-}
+/* card */
 
-.form-check-inline {
-  margin: 10px;
-}
-
-/* card style */
-
-.card {
-  height: 100%;
-}
-
-.card-img-top {
-  width: 100%;
-  height: auto;
-}
-
-/* /card styles */
-
-.ms-homepage {
-  min-height: 60vh;
-  width: 100%;
-  // margin-bottom: 50px;
-  margin: 0;
-  background-color: #F8F7F4;
-}
-
+// btn
 .btn-type {
   width: 60px;
   height: 60px;
 }
 
+.btn-outline-danger:focus {
+  box-shadow: none;
+}
+
+button:hover div {
+  transform: translateY(5px);
+  transition: transform 0.6s ease;
+}
+
+button div {
+  transition: transform 0.6s ease;
+}
+
+// media query
 
 @media (max-width: 992px) {
   .btn-type {
@@ -252,71 +242,4 @@ export default {
     padding-right: 30px;
   }
 }
-
-.selected-checkbox+.checkbox-btn {
-  background-color: $blue;
-  color: white;
-}
-
-.btn-round {
-  border-radius: 50%;
-}
-
-.btn-outline-danger:focus {
-  box-shadow: none;
-}
-
-button:hover div{
-            transform: translateY(5px);
-            transition: transform 0.6s ease;
-        }
-
-button div{
-  transition: transform 0.6s ease;
-}
-
-
-/* Riduci la dimensione del testo rendendolo responsive per tutti i breakpoint */
-
-// .btn {
-//   font-size: 1rem;
-// }
-
-// @media (max-width: 1200px) {
-//   .btn {
-//     font-size: 1.2rem;
-//   }
-// }
-
-// @media (max-width: 992px) {
-//   .btn {
-//     font-size: 1rem;
-//   }
-// }
-
-// @media (max-width: 768px) {
-//   .btn {
-//     font-size: 0.9rem;
-//   }
-// }
-
-// @media (max-width: 576px) {
-//   .btn {
-//     font-size: 0.8rem;
-//   }
-// }
-
-// @media (max-width: 400px) {
-//   .btn {
-//     font-size: 0.7rem;
-//   }
-// }
-
-// @media (max-width: 360px) {
-//   .btn {
-//     font-size: 0.6rem;
-//   }
-// }
-
-/* Riduci la dimensione del testo rendendolo responsive per tutti i breakpoint */
 </style>

@@ -47,6 +47,7 @@ export default {
         // Scroll up
         navbar.classList.remove('transparent-bg');
       }
+      this.lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Evita valori negativi
     }
   }
 };

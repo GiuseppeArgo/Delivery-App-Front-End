@@ -57,11 +57,6 @@
 }
 
 // commons
-.flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .contact {
   font-size: 12px;

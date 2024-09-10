@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router';
 import AppTop from '../components/AppTop.vue';
 
 export default {
-    components:{
+    components: {
         AppTop
     },
     data() {
@@ -34,7 +34,7 @@ export default {
     },
 
     created() {
-    window.scrollTo(0,0);
+        window.scrollTo(0, 0);
 
         // Store the navigation history count
         this.$root.historyCount = window.history.length;
@@ -51,10 +51,7 @@ export default {
             try {
                 // First call to get the token
                 await axios.get(`${store.apiMainUrl}/api/generatetoken`).then((resp) => {
-
-
                     const token = resp.data.result;
-
                 })
 
                 // Second call to make the payment
@@ -65,15 +62,12 @@ export default {
                     },
                     { headers: { 'Content-type': 'multipart/form-data' } }).
                     then(response => {
-
-
                         this.saveOrder();
                     })
                     .catch(({ error, response }) => {
                         this.isLoading = false;
                         this.isError = true;
                         console.error(error);
-
                     })
             } catch (error) {
                 this.isLoading = false;
@@ -83,7 +77,6 @@ export default {
         },
 
         saveOrder() {
-
             // Remove all spaces from fields before saving
             const cleanedFirstName = this.firstName.replace(/\s+/g, '');
             const cleanedLastName = this.lastName.replace(/\s+/g, '');
@@ -108,9 +101,7 @@ export default {
                 }
             })
                 .then(response => {
-
                     this.order_id = response.data.result;
-
                     // Send cart details along with the order ID
                     const params = {
                         order_id: this.order_id,
@@ -148,12 +139,10 @@ export default {
 
         validateForm() {
             this.errors = {};
-
             // Function to get the actual alphanumeric character count
             const getAlphanumericLength = (str) => {
                 return str.replace(/\s+/g, '').length; // Removes all spaces and calculates the length
             };
-
             // Check that the first name field is not empty and has at least 3 alphanumeric characters
             const firstNameAlphanumericLength = getAlphanumericLength(this.firstName);
             if (firstNameAlphanumericLength === 0) {
@@ -161,7 +150,6 @@ export default {
             } else if (firstNameAlphanumericLength < 3) {
                 this.errors.firstName = 'Il nome deve contenere almeno 3 caratteri.';
             }
-
             // Check that the last name field is not empty and has at least 3 alphanumeric characters
             const lastNameAlphanumericLength = getAlphanumericLength(this.lastName);
             if (lastNameAlphanumericLength === 0) {
@@ -169,7 +157,6 @@ export default {
             } else if (lastNameAlphanumericLength < 3) {
                 this.errors.lastName = 'Il cognome deve contenere almeno 3 caratteri.';
             }
-
             // Check that the address field is not empty and has at least 5 alphanumeric characters
             const addressAlphanumericLength = getAlphanumericLength(this.address);
             if (addressAlphanumericLength === 0) {
@@ -177,55 +164,46 @@ export default {
             } else if (addressAlphanumericLength < 5) {
                 this.errors.address = 'L\'indirizzo deve contenere almeno 5 caratteri.';
             }
-
             // Check that the phone number field is not empty and follows the format
             if (!this.phone) {
                 this.errors.phone = 'Il numero di telefono è obbligatorio.';
             } else {
                 // Remove all spaces from the phone number
                 const cleanedPhone = this.phone.replace(/\s+/g, '');
-
                 // Check that the phone number contains exactly 10 digits
                 if (!/^\d{10}$/.test(cleanedPhone)) {
                     this.errors.phone = 'Il numero di telefono deve essere di 10 cifre.';
                 }
             }
-
             // Check that the email field is not empty and follows the format
             if (!this.email) {
                 this.errors.email = 'L\'email è obbligatoria.';
             } else if (!this.validEmail(this.email)) {
                 this.errors.email = 'L\'email non è valida.';
             }
-
             // Check that the card number field is not empty and follows the format
             if (!this.paymentDetails.card_number) {
                 this.errors.card_number = 'Il numero della carta è obbligatorio.';
             } else if (!this.validCardNumber(this.paymentDetails.card_number)) {
                 this.errors.card_number = 'Il numero della carta non è valido.';
             }
-
             // Check that the card expiration date field is not empty and follows the format
             if (!this.paymentDetails.card_expire_date) {
                 this.errors.card_expire_date = 'La data di scadenza è obbligatoria.';
             } else if (!this.validExpirationDate(this.paymentDetails.card_expire_date)) {
                 this.errors.card_expire_date = 'La tua carta è scaduta.';
             }
-
             // If there are no errors, proceed with form submission
             if (Object.keys(this.errors).length === 0) {
                 // Retrieve 'cart' from localStorage
                 const cartString = localStorage.getItem('cart');
-
                 // Check if 'cart' is present in localStorage
                 if (!cartString) {
                     console.error('Nessun carrello trovato nel localStorage');
                     return;
                 }
-
                 // Check if 'cart' is present in localStorage
                 this.cart = JSON.parse(cartString);
-
                 // Check that 'totalPrice' is present in 'cart''
                 if (!this.cart || !this.cart.totalPrice) {
                     console.error('totalPrice non trovato nel carrello:', this.cart);
@@ -299,8 +277,8 @@ export default {
 </script>
 
 <template>
-    <AppTop :scrollThreshold="200" :scrollToPosition="200"/>
-    <div v-if="isSuccess === true" class="container ms_container">
+    <AppTop :scrollThreshold="200" :scrollToPosition="200" />
+    <div v-if="isSuccess === false" class="container ms_container">
         <div v-if="isError === true" class="alert alert-danger text-center">Ops, qualcosa è andato storto!</div>
         <div class="section-title">
             <span @click="goBack()" class="btn btn-outline-primary rounded-5 d-block d-sm-none">
@@ -311,45 +289,56 @@ export default {
             </span>
             <h2 class="text-center p-0 m-0">Procedi al checkout</h2>
         </div>
-        <!-- checkoutform??? -->
-        <form id="checkoutform">
+
+        <form>
             <!-- User Details -->
             <div class="form-group">
                 <h3>Dettagli utente</h3>
             </div>
             <div class="form-row">
-                <!-- User Name -->
+
+                <!-- Name -->
                 <div class="form-group col-md-6">
                     <label for="firstName">Nome <span class="asterisco">*</span></label>
                     <input type="text" class="form-control" id="firstName" v-model="firstName"
                         placeholder="Inserisci il nome" required minlength="3">
                     <div v-if="errors.firstName" class="text-danger">{{ errors.firstName }}</div>
                 </div>
-                <!-- User Lastname -->
+                <!-- /Name -->
+
+                <!-- Lastname -->
                 <div class="form-group col-md-6">
                     <label for="lastName">Cognome <span class="asterisco">*</span></label>
                     <input type="text" class="form-control" id="lastName" v-model="lastName"
                         placeholder="Inserisci il cognome" required minlength="3">
                     <div v-if="errors.lastName" class="text-danger">{{ errors.lastName }}</div>
                 </div>
+                <!-- /Lastname -->
+
             </div>
             <div class="form-row">
-                <!-- User Address -->
+
+                <!-- Address -->
                 <div class="form-group col-md-6">
                     <label for="address">Indirizzo <span class="asterisco">*</span></label>
                     <input type="text" class="form-control" id="address" v-model="address"
                         placeholder="Inserisci l'indirizzo" required minlength="5">
                     <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
                 </div>
-                <!-- User Phone Number -->
+                <!-- /Address -->
+
+                <!-- Phone Number -->
                 <div class="form-group col-md-6">
                     <label for="phone">Numero di Telefono <span class="asterisco">*</span></label>
                     <input type="text" class="form-control" id="phone" v-model="phone"
                         placeholder="Inserisci il numero di telefono" required>
                     <div v-if="errors.phone" class="text-danger">{{ errors.phone }}</div>
                 </div>
+                <!-- /Phone Number -->
+
             </div>
-            <!-- User Email -->
+
+            <!-- Email -->
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="email">Email <span class="asterisco">*</span></label>
@@ -358,11 +347,15 @@ export default {
                     <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
                 </div>
             </div>
-            <!-- User Card Details -->
-            <div class="form-group">
-                <h3>Dettagli della carta</h3>
-            </div>
+            <!-- /Email -->
+
+            <!-- card detail payment -->
+
+            <!-- title -->
+            <h3 class="mt-3">Dettagli della carta</h3>
+
             <div class="form-row">
+
                 <!-- Card Number -->
                 <div class="form-group col-md-6">
                     <label for="card-number">Numero carta <span class="asterisco">*</span></label>
@@ -370,6 +363,7 @@ export default {
                         required>
                     <div v-if="errors.card_number" class="text-danger">{{ errors.card_number }}</div>
                 </div>
+
                 <!-- Card Expiration Date -->
                 <div class="form-group col-md-6">
                     <label for="card-expire">Data di scadenza <span class="asterisco">*</span></label>
@@ -377,22 +371,30 @@ export default {
                         required>
                     <div v-if="errors.card_expire_date" class="text-danger">{{ errors.card_expire_date }}</div>
                 </div>
+                
             </div>
-            <p class="mb-3 label"><span class="asterisco">*</span> questi campi sono obbligatori.</p>
-            <div class="d-flex align-items-center gap-2">
-                <!-- btn pay -->
-                <button type="submit" class="flex-center btn btn-primary gap-2"
-                    @click.prevent="validateForm()">
-                    <span>Paga ora</span>
-                    <span v-if="isLoading === true" :class="isLoading === true ? 'spinner-border' : ''" class="spinner"></span>
-                </button>
-                <!-- btn pay -->
+            <!-- card detail payment -->
 
+
+            <p class="mt-5 mb-3 label"><span class="asterisco">*</span> questi campi sono obbligatori.</p>
+
+            <div class="d-flex">
+                <!-- btn pay -->
+                <button type="submit" class="flex-center btn btn-primary gap-2" @click.prevent="validateForm()">
+                    <span>Paga ora</span>
+                    <span v-if="isLoading === true" :class="isLoading === true ? 'spinner-border' : ''"
+                        class="spinner"></span>
+                </button>
+                <!-- /btn pay -->
+
+                <!-- total price -->
                 <div class="ml-auto ms_cart flex-sm-row">
                     <span class="fw-bold">Prezzo totale:</span>
                     <span class="d-none d-sm-inline-block">&ensp;</span>
                     <span>{{ cartPrice.totalPrice.toFixed(2) }} €</span>
                 </div>
+                <!-- /total price -->
+
             </div>
         </form>
     </div>
@@ -410,15 +412,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-
 @use "../sass/colorpalette.scss" as *;
-
-// commons
-.flex-center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 // container
 .container {
@@ -427,7 +421,7 @@ export default {
 }
 
 // title
-.section-title{
+.section-title {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -450,10 +444,12 @@ export default {
     margin-top: 100px;
     width: 40%;
     text-align: center;
-    a{
+
+    a {
         padding: 2px 15px;
     }
 }
+
 // /success payment
 
 // total price
@@ -466,8 +462,8 @@ export default {
     text-align: center;
     font-size: clamp(10px, 2vw, 15px);
 }
-// total price
 
+// total price
 
 label,
 .label {
@@ -493,13 +489,12 @@ label,
 @media (max-width: 1024px) {
     .img-success {
         width: 80%;
-        a{
+
+        a {
             font-size: 8px;
             padding: 3px 10px;
             border-radius: 4px;
         }
     }
 }
-
-
 </style>
