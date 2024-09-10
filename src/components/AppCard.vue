@@ -8,18 +8,9 @@ export default {
             baseSrc: "http://127.0.0.1:8000/storage",
         }
     },
-
-    computed: {
-        // edit types
-        typeNames() {
-            if (this.cardObj.types && this.cardObj.types.length > 0) {
-                return this.cardObj.types.map(type => type.name).join(' - ');
-            }
-            return '';
-        }
-        // edit types
-    },
+    
     methods: {
+        // flag image
         dynamicImage: function (curImg) {
             console.log(curImg);
             const lowerCaseImg = curImg.toLowerCase();
@@ -35,36 +26,35 @@ export default {
     <router-link :to="{ name: 'showrestaurant', params: { slug: cardObj.slug } }" class="text-decoration-none">
         <div class="card p-0 m-0">
 
-            <!-- image -->
+            <!-- restaurant image -->
             <div class="img-container">
-                <img class="card-img-top w-100" :src="`${baseSrc}/${cardObj.image}`" alt="Card image cap">
+                <img :src="`${baseSrc}/${cardObj.image}`" alt="Restaurant-image">
             </div>
-            <!-- /image -->
+            <!-- /restaurant image -->
 
             <!-- card text -->
-            <div class="card-body d-flex flex-column gap-1 p-2 mt-2">
+            <div class="card-body gap-1 p-2 mt-2">
 
                 <!-- name -->
-                <h5 class="card-title p-0 m-0 cutText font-size">
-
-                    <strong class="text-truncate">
-                        {{ cardObj.name }}
-                    </strong>
-
-                </h5>
+                <span class="card-title p-0 m-0 cutText text-truncate font-card-title">
+                    {{ cardObj.name }}
+                </span>
+                <!-- /name -->
 
                 <!-- address -->
                 <span class="card-title p-0 m-0 cutText">{{ cardObj.address }}</span>
+                <!-- /address -->
 
             </div>
             <!-- /card text -->
-            <!-- new types -->
-            <div v-if="cardObj.types && cardObj.types.length > 0" class="list-unstyled mb-2 container-types">
-                <div class="d-flex flex-row-reverse gap-2 types">
-                    <img :src="dynamicImage(type.name)" :alt="type.name" v-for="type in cardObj.types" :key="type.id">
+
+            <!-- types -->
+            <div v-if="cardObj.types && cardObj.types.length > 0" class="container-types">
+                <div class="types">
+                    <img :src="dynamicImage(type.name)" :alt="type.name + ' Flag'" v-for="type in cardObj.types" :key="type.id">
                 </div>
             </div>
-            <!-- / new types -->
+            <!-- /types -->
 
         </div>
     </router-link>
@@ -75,22 +65,25 @@ export default {
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
 
-.types{
+// flag types
+
+.container-types {
     position: absolute;
+    width: min-content;
     top: 5px;
     right: 5px;
 }
 
-.main-content {
-    padding: 20px 0;
+.types{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    width: 30px;
 }
+// flag types
 
-.form-check-inline {
-    margin: 10px;
-}
-
-/* card style */
-
+//card
+    // container
 .card {
     position: relative;
     height: 100%;
@@ -98,25 +91,17 @@ export default {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+.card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s;
+}
+
+    // card-text
 .card-body {
     position: absolute;
     width: 100%;
     bottom: 2%;
     background-color: rgba(255, 255, 255, 0.7);
-}
-
-
-
-
-
-.card-img-top {
-    width: 100%;
-    height: auto;
-}
-
-.card:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s;
 }
 
 .cutText {
@@ -126,48 +111,25 @@ export default {
     text-overflow: ellipsis;
 }
 
-// .font-size {
-//     font-size: 1.1rem;
-// }
-
-h5 {
+.font-card-title {
     font-size: clamp(13px, 2vw, 18px);
+    font-weight: 700;
 }
 
 span {
     font-size: clamp(10px, 2vw, 15px);
 }
 
-.badge {
-    font-weight: 500;
-    font-size: clamp(9px, 2vw, 13px);
-
-}
-
-
-
-@media (max-width: 768px) {
-
-    .container-types {
-        top: 10px;
-        right: 0;
-    }
-
-    .center {
-        text-align: center;
-    }
-}
+// @media query
 
 @media (max-width: 468px) {
     .text-truncate {
         text-wrap: wrap;
-        text-align: center;
     }
 
-    .types{
+    .types {
         width: 20px;
     }
 }
 
-/* /card style */
 </style>

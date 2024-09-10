@@ -4,27 +4,26 @@ export default {
         quantity: Number,
         scrollThreshold: {
             type: Number,
-            default: 0 // Imposta il valore predefinito per la soglia di scroll
+            default: 0 // Default value scroll 0
         }
     },
     data() {
         return {
             cart: '',
             slug: '',
-            isScrolled: false, // Aggiunta variabile per tracciare lo stato dello scroll
+            isScrolled: false, // flag scroll to change color
         }
     },
     created() {
         this.slug = localStorage.getItem('slug');
         this.cart = JSON.parse(localStorage.getItem('cart'));
-        window.addEventListener('scroll', this.handleScroll); // Aggiungi listener per lo scroll
+        window.addEventListener('scroll', this.handleScroll); // add listener scroll
     },
     beforeDestroy() {
-        window.removeEventListener('scroll', this.handleScroll); // Rimuovi listener per evitare memory leak
+        window.removeEventListener('scroll', this.handleScroll); // remove listener scroll
     },
     methods: {
         handleScroll() {
-            // Imposta la variabile isScrolled a true quando l'utente ha scrollato più della soglia definita
             this.isScrolled = window.scrollY > this.scrollThreshold;
         }
     }
@@ -33,25 +32,36 @@ export default {
 
 <template>
     <router-link :to="{ name: 'cartshopping', params: { slug: slug } }">
-        <div class="cart-container d-flex flex-column justify-content-center align-items-center position-fixed end-0 btn"
+        <div class="cart-container btn"
             :class="isScrolled ? 'btn-outline-primary' : 'btn-primary'"
             >
-            <!-- inserisci la quantità nel carrello -->
+            <!-- pop up quantity -->
             <div class="md_circle">
                 <span>
                     {{ quantity }}
                 </span>
             </div>
-            <!-- /inserisci la quantità nel carrello -->
-            <div class="cart d-flex justify-content-center align-items-center">
+            <!-- pop up quantity -->
+
+           <!-- pop up cart -->
+            <div class="cart ">
                 <i class="fa-solid fa-cart-shopping"></i>
             </div>
+           <!-- pop up cart -->
+
         </div>
     </router-link>
 </template>
 
 <style scoped lang="scss">
+
 .cart-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 0;
     width: 50px;
     border-radius: 50%;
     top: 130px;
@@ -59,17 +69,18 @@ export default {
     cursor: pointer;
     z-index: 99;
     transition: background-color 0.3s ease;
-    /* Per aggiungere una transizione fluida */
 }
 
 .cart {
     font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (max-width: 576px) {
     .cart-container {
         top: 300px;
-        /* Sposta il div più in basso */
     }
 }
 
@@ -105,9 +116,6 @@ export default {
         width: 20px;
         height: 20px;
         line-height: 20px;
-        text-align: center;
-        border-radius: 50%;
-        position: absolute;
         bottom: 25px;
         right: 25px;
         display: flex;

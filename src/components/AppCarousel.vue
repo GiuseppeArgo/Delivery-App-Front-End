@@ -31,8 +31,6 @@ export default {
         getImage(name) {
             if (this.flag.includes(name)) {
                 return new URL(`../assets/img/${name}.png`, import.meta.url).href;
-            } else {
-                return new URL(`../assets/img/int.png`, import.meta.url).href;
             }
         }
     }
@@ -40,103 +38,70 @@ export default {
 </script>
 
 <template>
-    <div class="container d-flex align-items-end ms_container carousel">
+    <div class="container">
         <div class="row " name="slide" mode="out-in">
 
-            <!-- dynamic image -->
+            <!-- image -->
             <div class="col-sm-12 col-md-6 col-lg-6 p-2">
-                
-                <transition name="fade" mode="out-in">
-                    
-                        <div  :key="currentFood" :class="{ 'active-slide': true }"
-                            class="d-flex justify-content-center  justify-content-md-end">
-                            <img :src="foods[currentFood].image" alt="" class="w-75" />
-                        </div>
-  
-                </transition>
-            
-            </div>
-            <!-- /dynamic image -->
 
-            <!-- dynamic text -->
-            <div class="col-sm-12 col-md-6 col-lg-6 p-2 d-flex justify-content-center justify-content-md-start">
-                
+                <transition name="fade" mode="out-in">
+
+                    <div :key="currentFood" :class="{ 'active-slide': true }"
+                        class="carousel-img justify-content-md-end">
+                        <img :src="foods[currentFood].image" alt="" class="w-75" />
+                    </div>
+
+                </transition>
+
+            </div>
+            <!-- /image -->
+
+            <!-- text -->
+            <div class="carousel-text  col-sm-12 col-md-6 col-lg-6 p-2 justify-content-md-start">
+
                 <transition name="slide-fade" mode="out-in">
-                    <!-- <p :key="currentFood" class="">{{ foods[currentFood].text }}</p> -->
-                        <img :src="foods[currentFood].text" alt="" :key="currentFood"
-                            class="w-75" />
-                    
+                    <img :src="foods[currentFood].text" alt="" :key="currentFood" class="w-75" />
+
                 </transition>
             </div>
-            <!-- dynamic text -->
+            <!-- /text -->
 
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-//Debug Container prova con dimenzioni i px indali per immagini
-// .md_cont-img1 {
-//     border: 1px solid;
-//     width: 556px;
-//     height: 360px;
-// }
-.ms_container {
+// container
+.container {
     width: 80%;
-
-    // img container
-    .container-img-food {
-        padding: 0;
-        margin: 0;
-
-        img {
-            width: 80%;
-        }
-    }
-
-    .ms_carousel-text {
+    display: flex;
+    align-items: end;
+    // text
+    .carousel-text {
         display: flex;
         justify-content: center;
         align-items: center;
-        position: relative;
-        /* Relative positioning to allow the transition */
     }
-}
-
-@media (max-width: 768px) {
-    .carousel {
-        max-width: 300px;
+    
+    // text
+    
+    
+    // img
+    .carousel-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+    // img
 }
 
-@media (min-width: 768px) {
-    .carousel {
-        min-width: 900px;
-    }
-}
 
-.ms_carousel-img {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    transform: translateX(0);
-    transition: transform 1s ease;
-    position: relative;
-}
-
-// /img container
-
-// text container
-.container-text-hero {
-    padding: 0;
-    margin: 0;
-}
-
-// /text container
+// img
 
 
-//// animation carousel
+// // // // // // // // // // 
+//       ANIMATION         //
+// // // // // // // // // // 
 
 // animation img food
 .fade-enter-active {
@@ -151,10 +116,6 @@ export default {
 .fade-leave-to {
     opacity: 0;
 }
-
-// .img-carousel{
-    
-// }
 
 // /animation img food
 

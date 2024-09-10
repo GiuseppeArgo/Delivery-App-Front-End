@@ -1,18 +1,18 @@
 <script>
-import { store } from '../store';
-import AppCart from './AppCart.vue';
-
 export default {
-  components: {
-    AppCart
+  data() {
+    return {
+      lastScrollTop: 0, // start scroll 0
+    };
   },
   mounted() {
     document.addEventListener('click', this.handleOutsideClick);
-    // Aggiungi il listener sui link per chiudere il menu quando viene cliccato un link
     this.addLinkClickListener();
+    window.addEventListener('scroll', this.handleScroll); // add event listner scroll
   },
   beforeDestroy() {
     document.removeEventListener('click', this.handleOutsideClick);
+    window.removeEventListener('scroll', this.handleScroll); // remove event listner scroll
   },
   methods: {
     handleOutsideClick(event) {
@@ -20,7 +20,7 @@ export default {
       if (navbar && !navbar.contains(event.target)) {
         const navbarCollapse = document.getElementById('navbarNav');
         if (navbarCollapse.classList.contains('show')) {
-          navbarCollapse.classList.remove('show'); // Chiudi il menu
+          navbarCollapse.classList.remove('show'); // close hamburger menu
         }
       }
     },
@@ -33,18 +33,31 @@ export default {
     closeMenu() {
       const navbarCollapse = document.getElementById('navbarNav');
       if (navbarCollapse.classList.contains('show')) {
-        navbarCollapse.classList.remove('show'); // Chiudi il menu dopo il clic su un link
+        navbarCollapse.classList.remove('show'); // close hamburger menu when click link
+      }
+    },
+    handleScroll() {
+      const navbar = this.$refs.navbar;
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (currentScroll > this.lastScrollTop) {
+        // scroll down
+        navbar.classList.add('transparent-bg');
+      } else {
+        // Scroll up
+        navbar.classList.remove('transparent-bg');
       }
     }
   }
 };
 </script>
 
+
 <template>
   <!-- Navbar -->
-
-  <!-- logo -->
   <nav class="navbar navbar-expand-sm" ref="navbar">
+
+    <!-- logo -->
     <div class="logo-img">
       <router-link :to="{ name: 'home' }">
         <img src="../assets/img/logo_top.png" alt="Logo">
@@ -91,13 +104,8 @@ export default {
 </template>
 
 <style scoped lang="scss">
-/* Navbar and Logo Management */
 
 @use "../sass/colorpalette.scss" as *;
-
-.container {
-  max-width: 100%;
-}
 
 .navbar {
   position: fixed;
@@ -106,11 +114,14 @@ export default {
   padding-left: 10px;
   padding-right: 10px;
   width: 100%;
-  // background-color: rgba(227, 15, 36,0.9);
-  background-color: $red;
+  background-color: rgb(201, 0, 54);
   color: $white;
   z-index: 1;
-  // px-3 position-fixed top-0 w-100
+  transition: opacity 0.3s ease-in-out;
+
+  &.transparent-bg {
+    opacity: 0;
+  }
 
   .logo-img {
     width: 70px;

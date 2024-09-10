@@ -129,7 +129,7 @@ export default {
 
     <!-- Sezione per la selezione dei tipi di cucina -->
     <div class="container font-title mb-5 pt-5">
-      <span class="d-block text-center text-danger pb-3 fs-4 fw-bold">
+      <span class="d-block text-center text-danger pb-3 fs-2 fw-bold">
         Seleziona la tipologia di cucina:
       </span>
       <div class="btn-container d-flex justify-content-center gap-1 flex-wrap">

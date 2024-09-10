@@ -1,44 +1,13 @@
-<!-- <script>
-export default {
-    data() {
-        return {
-            show: false,
-        }
-    },
-    created() {
-        window.addEventListener('scroll', this.handleScroll);
-    },
-    methods: {
-        toTop: function () {
-            document.documentElement.scrollTop = 0;
-        },
-        handleScroll: function () {
-            this.show = window.scrollY > 500;
-        }
-    }
-}
-</script>
-
-<template>
-    <div class="ms_aspect btn btn-outline-danger"
-        @click="toTop" v-if="show">
-        <div class="d-flex flex-column">
-            <i class="fa-solid fa-chevron-up"></i>
-            <span>TOP</span>
-        </div>
-    </div>
-</template> -->
-
 <script>
 export default {
     props: {
         scrollToPosition: {
             type: Number,
-            default: 0 // Posizione a cui scrollare (default: 0 = top)
+            default: 0 // position scroll default 0
         },
         scrollThreshold: {
             type: Number,
-            default: 500 // Soglia di scroll per mostrare il pulsante (default: 500px)
+            default: 500 // scroll default
         }
     },
     data() {
@@ -79,7 +48,6 @@ export default {
     position: fixed;
     bottom: 30%;
     right: 0;
-    // background-color: $red;
     font-weight: 700;
     width: 50px;
     border-radius: 50%;
@@ -92,7 +60,6 @@ export default {
     }
 
     &:hover {
-
 
         div {
             transform: translateY(-5px);

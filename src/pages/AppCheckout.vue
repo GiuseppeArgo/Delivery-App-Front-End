@@ -20,7 +20,6 @@ export default {
             cartPrice: 0,
             cart: '',
             store,
-            // slug: "pippo",
             order_id: 0,
             errors: {},
             paymentDetails: {
@@ -300,10 +299,10 @@ export default {
 </script>
 
 <template>
-    <AppTop :scrollThreshold="200" :scrollToPosition="150"/>
-    <div v-if="isSuccess === false" class="container ms_container">
+    <AppTop :scrollThreshold="200" :scrollToPosition="200"/>
+    <div v-if="isSuccess === true" class="container ms_container">
         <div v-if="isError === true" class="alert alert-danger text-center">Ops, qualcosa è andato storto!</div>
-        <div class="d-flex justify-content-center align-items-center position-relative w-100 m-auto mb-5 gap-2">
+        <div class="section-title">
             <span @click="goBack()" class="btn btn-outline-primary rounded-5 d-block d-sm-none">
                 <i class="fa-solid fa-arrow-left"></i>
             </span>
@@ -381,12 +380,15 @@ export default {
             </div>
             <p class="mb-3 label"><span class="asterisco">*</span> questi campi sono obbligatori.</p>
             <div class="d-flex align-items-center gap-2">
-                <button type="submit" class="btn-paynow btn btn-primary d-flex justify-content-center align-items-center gap-2"
+                <!-- btn pay -->
+                <button type="submit" class="flex-center btn btn-primary gap-2"
                     @click.prevent="validateForm()">
                     <span>Paga ora</span>
                     <span v-if="isLoading === true" :class="isLoading === true ? 'spinner-border' : ''" class="spinner"></span>
                 </button>
-                <div class="ml-auto ms_cart d-flex flex-column flex-sm-row text-center">
+                <!-- btn pay -->
+
+                <div class="ml-auto ms_cart flex-sm-row">
                     <span class="fw-bold">Prezzo totale:</span>
                     <span class="d-none d-sm-inline-block">&ensp;</span>
                     <span>{{ cartPrice.totalPrice.toFixed(2) }} €</span>
@@ -395,9 +397,9 @@ export default {
         </form>
     </div>
     <!-- New Page If Payment Is Successful -->
-    <div v-else class="ms_container page_success">
-        <div class="ms_message d-flex flex-column gap-4 justify-content-center align-items-center">
-            <div class="d-flex flex-column justify-content-center align-items-center img-success mb-5">
+    <div v-else class="container-fluid page_success">
+        <div class="ms_message flex-center flex-column gap-4">
+            <div class="img-success">
                 <img src="../assets/img/success.png" alt="">
                 <routerLink :to="{ name: 'home' }">
                     <a class="btn btn-primary">Home</a>
@@ -408,18 +410,33 @@ export default {
 </template>
 
 <style scoped lang="scss">
+
 @use "../sass/colorpalette.scss" as *;
 
-
-.ms_container {
-    // min-height: 80vh;
-    margin-top: 150px;
-    margin-bottom: 50px;
-    // width: 100%;
+// commons
+.flex-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+// container
+.container {
+    margin-top: 150px;
+    margin-bottom: 50px;
+}
+
+// title
+.section-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+// success payment
 .page_success {
-    width: 100%;
     background-color: $white;
     min-height: 100vh;
     margin: 0;
@@ -432,31 +449,29 @@ export default {
 .img-success {
     margin-top: 100px;
     width: 40%;
+    text-align: center;
+    a{
+        padding: 2px 15px;
+    }
 }
+// /success payment
 
+// total price
 .ms_cart {
     padding: 5px 5px;
     border: 1px solid $blue;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
     font-size: clamp(10px, 2vw, 15px);
 }
+// total price
+
 
 label,
 .label {
     font-size: clamp(12px, 2vw, 15px);
-}
-
-.spinner {
-    font-size: 10px;
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-}
-
-@media (max-width: 1024px) {
-    .img-success {
-        width: 80%;
-    }
 }
 
 .asterisco {
@@ -466,4 +481,25 @@ label,
 .text-danger {
     font-size: 0.9rem;
 }
+
+.spinner {
+    font-size: 10px;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+}
+
+// media query
+@media (max-width: 1024px) {
+    .img-success {
+        width: 80%;
+        a{
+            font-size: 8px;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+    }
+}
+
+
 </style>
