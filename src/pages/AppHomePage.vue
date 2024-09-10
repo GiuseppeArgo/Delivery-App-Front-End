@@ -150,7 +150,7 @@ export default {
       <div class="row gap-3 justify-content-center p-0 m-0" v-if="restaurantsList.length > 0">
         <!-- card -->
         <div v-for="curRestaurant in restaurantsList" :key="curRestaurant.id"
-          class="card col-7 col-sm-5 col-md-4 col-lg-3 p-0 m-0">
+          class="card border-0 col-7 col-sm-5 col-md-4 col-lg-3 p-0 m-0">
           <AppCard :cardObj="curRestaurant" />
         </div>
         <!-- /card -->
@@ -186,6 +186,10 @@ export default {
 @use "../sass/colorpalette.scss" as *;
 
 /* card */
+// .card{
+//   border-top-left-radius: 50%;
+// }
+
 
 // btn
 .btn-type {

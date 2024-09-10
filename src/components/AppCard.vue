@@ -67,11 +67,19 @@ export default {
 
 // flag types
 
+.card,.img-container,img{
+border-top-left-radius: 15%;
+border-top-right-radius: 15%;
+border-bottom-left-radius: 20px;
+border-bottom-right-radius: 20px;
+
+}
+
 .container-types {
     position: absolute;
     width: min-content;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 15px;
 }
 
 .types{
@@ -100,7 +108,8 @@ export default {
 .card-body {
     position: absolute;
     width: 100%;
-    bottom: 2%;
+    bottom: 0;
+    border-radius: 0 0 20px 20px;
     background-color: rgba(255, 255, 255, 0.7);
 }
 
