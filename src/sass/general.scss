@@ -5,6 +5,11 @@
 //      COMMONS      //
 // / / / / / / / / / // 
 
+.container-homepage{
+  min-height: 65vh;
+  margin-bottom: 120px;
+}
+
 // no scrollbar
 ::-webkit-scrollbar {
   display: none;
@@ -94,6 +99,9 @@ img {
     height: 20px;
     line-height: 20px;
     font-size: 12px;
+  }
+  .container-homepage{
+    margin-bottom: 150px;
   }
 
   .font-title{

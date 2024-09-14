@@ -30,14 +30,15 @@ export default {
   },
 
   created() {
-    this.cart = JSON.parse(localStorage.getItem('cart'));
-    this.slug = localStorage.getItem('slug');
-    this.CallRestaurant(); // start loading restaurant
-    this.CallTypes(); // call to typeList
-  },
+  this.cart = JSON.parse(localStorage.getItem('cart'));
+  this.slug = localStorage.getItem('slug');
+  this.CallRestaurant(); // start loading restaurant
+  this.CallTypes(); // call to typeList
+},
 
   methods: {
     CallRestaurant() {
+      this.isLoading = true;
       // trasform to JSON the selected types
       const selectedTypesJson = encodeURIComponent(
         JSON.stringify(this.selectedTypes)
@@ -45,7 +46,6 @@ export default {
       axios
         .get(`${store.apiMainUrl}/api/restaurants?type=${selectedTypesJson}&page=${this.currentPage}`)
         .then((response) => {
-          this.isLoading = true;
 
           if (response.data && response.data.data && response.data.data.length > 0) {
             // add to list the new restaurant loaded
@@ -116,11 +116,11 @@ export default {
 </script>
 
 <template>
-  <AppHeader />
   <AppHero />
   <AppTop />
 
-  <div>
+
+  <div class="container-homepage">
     <!-- cart-container -->
     <div v-if="getCartItemsLength() > 0">
       <AppLinkCart :quantity="cart.totalQuantity" :scrollThreshold="300" />
@@ -144,20 +144,28 @@ export default {
     </div>
     <!-- Filter for typologies -->
 
+    <!-- Loading spinner -->
+    <div v-if="isLoading" class="loading-container text-center">
+      <!-- Spinner Icon -->
+      <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      <span>Caricamento...</span>
+    </div>
+    <!-- /Loading spinner -->
 
     <!-- card-container -->
     <div class="container pb-5">
-      <div class="row gap-3 justify-content-center p-0 m-0" v-if="restaurantsList.length > 0">
+      <div class="row justify-content-center gap-3 p-0 m-0" v-if="restaurantsList.length > 0">
         <!-- card -->
         <div v-for="curRestaurant in restaurantsList" :key="curRestaurant.id"
-          class="card border-0 col-7 col-sm-5 col-md-4 col-lg-3 p-0 m-0">
+          class="card border-0 col-7 col-sm-5 col-md-3 col-lg-3 p-0 m-0">
           <AppCard :cardObj="curRestaurant" />
         </div>
         <!-- /card -->
       </div>
 
       <!-- No result found -->
-      <div v-else class="row w-75 m-auto border rounded-5 py-3 px-4 text-center">
+      <div v-if="restaurantsList.length === 0 && !isLoading"
+        class="row w-75 m-auto border rounded-5 py-3 px-4 text-center">
         <p class="fw-bold fs-5 m-0">
           Nessun ristorante corrispondente alla tua ricerca
         </p>
@@ -169,7 +177,7 @@ export default {
 
     <!-- btn load more restaurant" -->
     <div class="text-center mb-4">
-      <button v-if="hasMoreRecords" @click="loadMoreRestaurants" :disabled="isLoading"
+      <button v-if="hasMoreRecords && !isLoading" @click="loadMoreRestaurants" :disabled="isLoading"
         class="btn btn-outline-danger rounded-4">
         <div class="d-flex flex-column">
           <span>Mostra di più</span>
@@ -184,12 +192,6 @@ export default {
 
 <style scoped lang="scss">
 @use "../sass/colorpalette.scss" as *;
-
-/* card */
-// .card{
-//   border-top-left-radius: 50%;
-// }
-
 
 // btn
 .btn-type {

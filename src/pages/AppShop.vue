@@ -152,13 +152,14 @@ export default {
 
 <template>
   <AppTop :scrollThreshold="200"/>
-  <div class="container">
+  <div class="container vh-100">
     <div class="w-75 m-auto position-relative d-flex justify-content-center align-items-center gap-2 mb-5">
       <!-- btn go back -->
       <span @click="goBack()" class="btn btn-outline-primary rounded-5 btn-title btn-pos-left">
         <i class="fa-solid fa-arrow-left"></i>
       </span>
-      <!-- btn go bbtn-pos-right      <!-- title -->
+      <!-- btn go bbtn-pos-right -->     
+      <!-- title -->
       <h1 class="text-center m-0">Carrello</h1>
       <!-- /title -->
     </div>
@@ -287,7 +288,7 @@ export default {
 // container
 .container {
   margin-top: 150px;
-  min-height: 60vh;
+  min-height: 62vh;
 }
 
 .container-empty-cart{
@@ -319,15 +320,6 @@ export default {
 
 
 // media query
-@media (max-width: 768px) {
-  .w-sm-25 {
-    width: 100% !important;
-  }
-
-  .mb-sm-0 {
-    margin-bottom: 0 !important;
-  }
-}
 
 @media (max-width: 468px){
   .container{

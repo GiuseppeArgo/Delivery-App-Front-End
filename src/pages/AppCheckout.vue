@@ -278,7 +278,7 @@ export default {
 
 <template>
     <AppTop :scrollThreshold="200" :scrollToPosition="200" />
-    <div v-if="isSuccess === false" class="container ms_container">
+    <div v-if="isSuccess === false" class="container">
         <div v-if="isError === true" class="alert alert-danger text-center">Ops, qualcosa è andato storto!</div>
         <div class="section-title">
             <span @click="goBack()" class="btn btn-outline-primary rounded-5 d-block d-sm-none">
@@ -417,7 +417,7 @@ export default {
 // container
 .container {
     margin-top: 150px;
-    margin-bottom: 50px;
+    margin-bottom: 120px;
 }
 
 // title
@@ -495,6 +495,12 @@ label,
             padding: 3px 10px;
             border-radius: 4px;
         }
+    }
+}
+
+@media (max-width: 468px) {
+    .container{
+        margin-bottom: 180px;
     }
 }
 </style>

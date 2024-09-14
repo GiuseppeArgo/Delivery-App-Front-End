@@ -382,8 +382,8 @@ export default {
                     <span class="fs-4">Stai cambiando ristorante. <br>Vuoi svuotare il carrello?</span>
                 </div>
                 <div class="modal-footer d-flex justify-content-around">
-                    <button type="button" class="btn btn-danger w-25" @click="handleCancel">Annulla</button>
-                    <button type="button" class="btn btn-primary w-25" @click="handleConfirm">Svuota</button>
+                    <button type="button" class="btn btn-outline-danger w-25" @click="handleCancel">Annulla</button>
+                    <button type="button" class="btn btn-outline-success w-25" @click="handleConfirm">Svuota</button>
                 </div>
             </div>
         </div>
@@ -417,7 +417,7 @@ export default {
 .container-show-restaurant {
     position: relative;
     margin-top: 100px;
-    margin-bottom: 50px;
+    margin-bottom: 120px;
 }
 
 .container-types-list {
